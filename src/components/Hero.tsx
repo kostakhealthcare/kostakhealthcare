@@ -13,7 +13,6 @@ import {
   ChevronRight,
   Maximize2,
   X,
-  AlertTriangle,
   CheckCircle,
   Eye,
   Info,
@@ -33,7 +32,6 @@ interface HeroProps {
   selectedPack: ProductPackOption;
   setSelectedPack: React.Dispatch<React.SetStateAction<ProductPackOption>>;
   onOrderWhatsApp: (pack?: ProductPackOption, qty?: number) => void;
-  onOpenOwnerConfig: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({
@@ -43,7 +41,6 @@ export const Hero: React.FC<HeroProps> = ({
   selectedPack,
   setSelectedPack,
   onOrderWhatsApp,
-  onOpenOwnerConfig,
 }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -117,11 +114,6 @@ export const Hero: React.FC<HeroProps> = ({
   const unitPrice = selectedPack?.price ?? (config.price ? Number(config.price) : null);
   const unitMrp = selectedPack?.mrp ?? (config.mrp ? Number(config.mrp) : null);
   const totalPrice = unitPrice ? unitPrice * quantity : null;
-
-  const hasConfiguredWhatsApp =
-    config.whatsAppNumber &&
-    config.whatsAppNumber.replace(/\D/g, '').length >= 10 &&
-    !config.whatsAppNumber.includes('XXXX');
 
   const handleDecrease = () => {
     setQuantity((prev) => Math.max(1, prev - 1));
@@ -537,23 +529,6 @@ export const Hero: React.FC<HeroProps> = ({
                   Direct WhatsApp verification
                 </span>
               </div>
-
-              {/* Notice if WhatsApp is placeholder */}
-              {!hasConfiguredWhatsApp && (
-                <div className="p-3 bg-[#FFF8EB] border border-[#F2D7A5] rounded-xl text-xs text-[#825400] flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-[#C07E00] shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-semibold">Owner Setup Notice: </span>
-                    WhatsApp business number is not yet updated in <code className="bg-[#F6E6C5] px-1 py-0.5 rounded">site-config.js</code>.
-                    <button
-                      onClick={onOpenOwnerConfig}
-                      className="ml-1 underline font-semibold text-[#663E00] hover:text-black"
-                    >
-                      Configure phone number now &rarr;
-                    </button>
-                  </div>
-                </div>
-              )}
 
               {/* Secondary CTA */}
               <div className="text-center pt-1">

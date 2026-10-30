@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { MessageSquare, ShieldCheck, Mail, Sliders } from 'lucide-react';
+import { MessageSquare, ShieldCheck, Mail } from 'lucide-react';
 import { SiteConfig } from '../config';
 import { PolicyType } from './PolicyModal';
 
@@ -12,14 +12,12 @@ interface FooterProps {
   config: SiteConfig;
   onOpenPolicy: (type: PolicyType) => void;
   onOrderWhatsApp: () => void;
-  onOpenOwnerConfig: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   config,
   onOpenPolicy,
   onOrderWhatsApp,
-  onOpenOwnerConfig,
 }) => {
   return (
     <footer className="bg-[#122419] text-[#E0EBE2] border-t border-[#1F3D2A] pt-14 pb-12">
@@ -45,19 +43,10 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="pt-1 flex items-center gap-2">
               <button
                 onClick={onOrderWhatsApp}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1C8A4E] hover:bg-[#167440] text-white text-xs font-semibold transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1C8A4E] hover:bg-[#167440] text-white text-xs font-semibold transition-colors shadow-xs"
               >
                 <MessageSquare className="w-3.5 h-3.5 fill-white" />
                 <span>Buy via WhatsApp</span>
-              </button>
-
-              <button
-                onClick={onOpenOwnerConfig}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#1B3525] hover:bg-[#254633] text-[#A2BBAA] hover:text-white text-xs transition-colors"
-                title="Store settings and site-config editor"
-              >
-                <Sliders className="w-3.5 h-3.5" />
-                <span>Owner Config</span>
               </button>
             </div>
           </div>

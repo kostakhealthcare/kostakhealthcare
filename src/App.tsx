@@ -17,11 +17,9 @@ import { Hero } from './components/Hero';
 import { ProductInformation } from './components/ProductInformation';
 import { ProductBenefits } from './components/ProductBenefits';
 import { CustomerReviews } from './components/CustomerReviews';
-import { ReviewVideos } from './components/ReviewVideos';
 import { FaqSection } from './components/FaqSection';
 import { ContactAndShipping } from './components/ContactAndShipping';
 import { PolicyModal, PolicyType } from './components/PolicyModal';
-import { OwnerConfigModal } from './components/OwnerConfigModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { Footer } from './components/Footer';
 
@@ -42,7 +40,6 @@ export default function App() {
   const [quantity, setQuantity] = useState<number>(1);
   const [policyModalOpen, setPolicyModalOpen] = useState<boolean>(false);
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyType>('privacyPolicy');
-  const [ownerConfigOpen, setOwnerConfigOpen] = useState<boolean>(false);
   const [missingPhoneAlert, setMissingPhoneAlert] = useState<boolean>(false);
 
   // Sync with window.DAAD_FREE_CONFIG if dynamically injected
@@ -126,34 +123,22 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1D2A22]">
-      {/* Missing WhatsApp configuration dialog */}
+      {/* Customer support connection notice if needed */}
       {missingPhoneAlert && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-[#E2DDD0]">
             <h3 className="text-lg font-bold text-[#14291B] font-serif-title">
-              WhatsApp Number Configuration Required
+              WhatsApp Support
             </h3>
             <p className="text-xs sm:text-sm text-[#4E6255] mt-2 leading-relaxed">
-              The official WhatsApp business number has not yet been set up in <code>site-config.js</code>.
+              To place your order or speak with our Ayurvedic support representative, please reach us directly at WhatsApp / Phone <strong>+91 9131138853</strong> or email <a href="mailto:contact@kostakhealthcare.com" className="text-[#235E37] underline">contact@kostakhealthcare.com</a>.
             </p>
-            <p className="text-xs text-[#63786A] mt-2">
-              If you are the store owner, you can set your 10-12 digit WhatsApp phone number right now in the Owner Settings drawer.
-            </p>
-            <div className="mt-6 flex gap-3">
-              <button
-                onClick={() => {
-                  setMissingPhoneAlert(false);
-                  setOwnerConfigOpen(true);
-                }}
-                className="flex-1 py-2.5 px-4 rounded-xl bg-[#235E37] text-white text-xs sm:text-sm font-semibold hover:bg-[#18482A] transition-colors"
-              >
-                Configure WhatsApp Number
-              </button>
+            <div className="mt-6 flex justify-end">
               <button
                 onClick={() => setMissingPhoneAlert(false)}
-                className="py-2.5 px-4 rounded-xl bg-[#EFE9DC] text-[#34473B] text-xs sm:text-sm font-semibold hover:bg-[#E5DDCB]"
+                className="py-2.5 px-6 rounded-xl bg-[#235E37] text-white text-xs sm:text-sm font-semibold hover:bg-[#18482A] transition-colors"
               >
-                Cancel
+                Close
               </button>
             </div>
           </div>
@@ -163,7 +148,6 @@ export default function App() {
       {/* Header */}
       <Header
         config={config}
-        onOpenOwnerConfig={() => setOwnerConfigOpen(true)}
         onOrderWhatsApp={handleOrderWhatsApp}
         onOpenPolicy={handleOpenPolicy}
       />
@@ -178,7 +162,6 @@ export default function App() {
           selectedPack={selectedPack}
           setSelectedPack={setSelectedPack}
           onOrderWhatsApp={handleOrderWhatsApp}
-          onOpenOwnerConfig={() => setOwnerConfigOpen(true)}
         />
 
         {/* Product Information with verified label ingredients and directions */}
@@ -191,12 +174,6 @@ export default function App() {
         <CustomerReviews
           config={config}
           onReviewSubmitted={handleReviewSubmitted}
-        />
-
-        {/* Customer Review Videos */}
-        <ReviewVideos
-          config={config}
-          onOpenOwnerConfig={() => setOwnerConfigOpen(true)}
         />
 
         {/* FAQ Section */}
@@ -214,7 +191,6 @@ export default function App() {
         config={config}
         onOpenPolicy={handleOpenPolicy}
         onOrderWhatsApp={handleOrderWhatsApp}
-        onOpenOwnerConfig={() => setOwnerConfigOpen(true)}
       />
 
       {/* Floating WhatsApp Action Button */}
@@ -230,14 +206,6 @@ export default function App() {
         onClose={() => setPolicyModalOpen(false)}
         initialTab={selectedPolicy}
         config={config}
-      />
-
-      {/* Store Owner Configurator Modal */}
-      <OwnerConfigModal
-        isOpen={ownerConfigOpen}
-        onClose={() => setOwnerConfigOpen(false)}
-        config={config}
-        onConfigUpdated={(newCfg) => setConfig(newCfg)}
       />
     </div>
   );

@@ -33,7 +33,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ config }) => {
     },
     {
       q: 'What if the price shows "Contact us for price"?',
-      a: `If the store owner has not set a fixed retail price in the website configuration, the website displays "Contact us for price". When you message us on WhatsApp, our representative will provide current batch pricing, bulk discounts, and shipping estimates.`,
+      a: `If a specific promotional or wholesale price is not listed, our representative will immediately provide current batch pricing, multi-pack discounts, and delivery estimates when you connect with us on WhatsApp.`,
     },
     {
       q: 'How long does delivery take?',

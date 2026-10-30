@@ -4,19 +4,17 @@
  */
 
 import React, { useState } from 'react';
-import { MessageSquare, Sliders, Menu, X, ShieldCheck } from 'lucide-react';
+import { MessageSquare, Menu, X, ShieldCheck } from 'lucide-react';
 import { SiteConfig } from '../config';
 
 interface HeaderProps {
   config: SiteConfig;
-  onOpenOwnerConfig: () => void;
   onOrderWhatsApp: () => void;
   onOpenPolicy: (policyKey: 'privacyPolicy' | 'termsAndConditions' | 'shippingPolicy' | 'cancellationAndRefundPolicy') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   config,
-  onOpenOwnerConfig,
   onOrderWhatsApp,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -80,16 +78,6 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Action CTAs */}
           <div className="hidden sm:flex items-center gap-3">
-            {/* Owner settings gear */}
-            <button
-              onClick={onOpenOwnerConfig}
-              title="Store Owner Settings & Config Generator"
-              className="p-2.5 rounded-full text-[#4B6353] hover:text-[#132B1E] hover:bg-[#EFE9DD] transition-colors border border-transparent hover:border-[#DCD5C5]"
-            >
-              <Sliders className="w-4 h-4" />
-              <span className="sr-only">Owner Settings</span>
-            </button>
-
             {/* WhatsApp Order Button */}
             <button
               onClick={onOrderWhatsApp}
@@ -102,13 +90,6 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Mobile menu button */}
           <div className="flex items-center gap-2 sm:hidden">
-            <button
-              onClick={onOpenOwnerConfig}
-              title="Store Settings"
-              className="p-2 text-[#4B6353] hover:text-[#132B1E]"
-            >
-              <Sliders className="w-4 h-4" />
-            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-[#132B1E] hover:bg-[#EFE9DD] rounded-lg"
@@ -145,16 +126,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <MessageSquare className="w-4 h-4 fill-white" />
               <span>Buy Now on WhatsApp</span>
-            </button>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenOwnerConfig();
-              }}
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-xs text-[#526859] hover:bg-[#EFE9DD] border border-[#DDD5C3]"
-            >
-              <Sliders className="w-3.5 h-3.5" />
-              <span>Owner Config & Settings</span>
             </button>
           </div>
         </div>

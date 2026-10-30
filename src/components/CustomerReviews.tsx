@@ -45,7 +45,7 @@ export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ config, onRevi
       date: new Date().toISOString().split('T')[0],
       reviewText: reviewText.trim(),
       photoUrl: photoUrl.trim() || undefined,
-      approved: false, // Must be approved by owner before public display!
+      approved: false, // Submitted reviews require verification before public display
     };
 
     onReviewSubmitted(newReview);
@@ -205,9 +205,9 @@ export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ config, onRevi
             {submittedMessage ? (
               <div className="mt-6 p-6 rounded-2xl bg-[#EAF5EE] border border-[#B8DEC3] text-center">
                 <CheckCircle2 className="w-8 h-8 text-[#1A6C39] mx-auto mb-2" />
-                <h4 className="text-sm font-bold text-[#112418]">Review Submitted for Moderation</h4>
+                <h4 className="text-sm font-bold text-[#112418]">Review Submitted</h4>
                 <p className="text-xs text-[#395041] mt-1">
-                  Thank you for your valuable feedback! It will appear once approved by the business administrator.
+                  Thank you for your valuable feedback! It will appear once verified by our quality team.
                 </p>
               </div>
             ) : (
@@ -297,7 +297,7 @@ export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ config, onRevi
                     className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#235E37] text-white text-xs sm:text-sm font-semibold hover:bg-[#1A4A2B] transition-colors shadow-xs"
                   >
                     <Send className="w-4 h-4" />
-                    <span>Submit Review for Admin Approval</span>
+                    <span>Submit Customer Review</span>
                   </button>
                 </div>
               </form>

@@ -24,10 +24,9 @@ A production-ready, responsive, lightweight skincare product website built for *
 - **Zero Payment Gateway Friction**: No credit card processor or payment fees; the business confirms stock, pincode shipping, and direct payment methods (UPI, Bank, COD) on WhatsApp.
 - **No Fake Price Guarantee**: If no price is configured, the website automatically displays *"Contact us for price"* and omits price/totals from the WhatsApp inquiry.
 - **Interactive Product Gallery**: Showcases the 25 gm carton packaging and tube (`25 gm_Master_Product_front.jpg.jpeg`) and promotional imagery (`Post1_Option2.jpg.jpeg`, `Post2.jpg.jpeg`) with interactive thumbnail switching and full-screen lightbox zoom.
-- **Authentic Reviews (No Fake Testimonials)**: Starts clean and empty per compliance rules. Customers can submit feedback, which appears only after approval by the store owner.
-- **Review Videos**: Displays approved customer review videos (YouTube embeds or direct MP4 files) with play/pause controls and zero invasive sound autoplay.
+- **Authentic Reviews (No Fake Testimonials)**: Starts clean and empty per compliance rules. Customers can submit feedback, which appears only after moderation.
 - **Google Drive Image Integration**: Load high-resolution images directly from Google Drive using Google's global CDN (`https://lh3.googleusercontent.com/d/{FILE_ID}`) with cache-busting and automatic local fallback.
-- **Owner Configurator UI**: A built-in visual settings drawer to test prices, phone numbers, and moderation locally, with 1-click **"Copy `site-config.js`"** and **"Download `site-config.js`"**.
+- **Secure Public Deployment**: Public owner/admin buttons and UI are completely removed from the frontend bundle for production security.
 - **Complete Legal Policies**: Privacy Policy, Terms and Conditions, Shipping & Delivery Policy, and Cancellation & Refund Policy.
 - **Full SEO & Schema.org**: Rich OpenGraph social sharing cards, Twitter cards, and Schema.org JSON-LD Product & Organization metadata.
 
@@ -45,7 +44,6 @@ A production-ready, responsive, lightweight skincare product website built for *
 │   │   │   ├── daad-free-main.jpg                     <-- Local alias
 │   │   │   ├── daad-free-promo-1.jpg
 │   │   │   └── daad-free-promo-2.jpg
-│   │   └── videos/                                    <-- Optional local MP4 review videos
 │   └── site-config.js                                 <-- Static configuration file
 ├── src/
 │   ├── components/
@@ -54,11 +52,9 @@ A production-ready, responsive, lightweight skincare product website built for *
 │   │   ├── ProductInformation.tsx                     <-- Verified specs, directions & safety
 │   │   ├── ProductBenefits.tsx                        <-- Botanical benefits & legal notices
 │   │   ├── CustomerReviews.tsx                        <-- Moderated customer reviews
-│   │   ├── ReviewVideos.tsx                           <-- Video reviews (YouTube/MP4)
 │   │   ├── FaqSection.tsx                             <-- Frequently asked questions
 │   │   ├── ContactAndShipping.tsx                     <-- Contact details & transit times
 │   │   ├── PolicyModal.tsx                            <-- Tabbed policy viewer
-│   │   ├── OwnerConfigModal.tsx                       <-- Visual settings & config generator
 │   │   └── FloatingWhatsApp.tsx                       <-- Bottom-right quick-order trigger
 │   ├── config.ts                                      <-- Config engine & Drive URL resolver
 │   ├── App.tsx                                        <-- Main application layout
@@ -273,10 +269,10 @@ npm run dev -- --host
 | Problem | Cause | Solution |
 | :--- | :--- | :--- |
 | **WhatsApp link doesn't open** | Phone number contains letters or country code is missing | Ensure `whatsAppNumber` in `site-config.js` has digits only with country code (e.g. `919876543210` for India, no `+` sign). |
-| **Price shows "Contact us for price"** | Price is set to `null` or empty | Set `price: 199` in `site-config.js` or via the Owner Settings drawer. |
+| **Price shows "Contact us for price"** | Price is set to `null` or empty | Set `price: 199` in `site-config.js` or `src/config.ts`. |
 | **Google Drive image does not load** | File sharing is set to *Restricted* | In Google Drive, change access to **"Anyone with the link can view"**. The website will fall back to local images until corrected. |
-| **Updated image still shows old photo** | Browser cached the old image file | Bump `imageVersion: 2` in `site-config.js` or click "Bump Version" in the Owner Configurator. |
-| **No reviews appear** | Reviews must be approved by the owner | Open Owner Settings &rarr; Reviews tab &rarr; Click "Approve" on submitted reviews. |
+| **Updated image still shows old photo** | Browser cached the old image file | Bump `imageVersion: 2` in `site-config.js` or `src/config.ts`. |
+| **No reviews appear** | Reviews must be approved | Store configuration manages verified review approval in `site-config.js`. |
 
 ---
 
