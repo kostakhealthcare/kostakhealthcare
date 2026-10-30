@@ -1,0 +1,6 @@
+{
+  "name": "KOSTAK Healthcare - DAAD FREE Ayurvedic Antifungal Cream",
+  "description": "Official product website and WhatsApp direct ordering for DAAD FREE Ayurvedic Antifungal Cream (25 gm) by KOSTAK Healthcare.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
