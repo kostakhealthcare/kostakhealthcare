@@ -15,13 +15,16 @@ import {
   X,
   AlertTriangle,
   CheckCircle,
+  Tag,
 } from 'lucide-react';
-import { SiteConfig, resolveImageUrl, ProductImageConfig } from '../config';
+import { SiteConfig, resolveImageUrl, ProductImageConfig, ProductPackOption } from '../config';
 
 interface HeroProps {
   config: SiteConfig;
   quantity: number;
   setQuantity: React.Dispatch<React.SetStateAction<number>>;
+  selectedPack: ProductPackOption;
+  setSelectedPack: React.Dispatch<React.SetStateAction<ProductPackOption>>;
   onOrderWhatsApp: () => void;
   onOpenOwnerConfig: () => void;
 }
@@ -30,6 +33,8 @@ export const Hero: React.FC<HeroProps> = ({
   config,
   quantity,
   setQuantity,
+  selectedPack,
+  setSelectedPack,
   onOrderWhatsApp,
   onOpenOwnerConfig,
 }) => {
@@ -37,22 +42,49 @@ export const Hero: React.FC<HeroProps> = ({
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [imageErrorMap, setImageErrorMap] = useState<Record<number, boolean>>({});
 
-  // Gallery images array
-  const galleryItems: { key: string; item: ProductImageConfig; title: string }[] = [
+  // Full gallery items using the actual uploaded product images
+  const galleryItems: { key: string; item: ProductImageConfig; title: string; category: string }[] = [
     {
       key: 'main',
       item: config.images.mainImage,
-      title: 'Packaging & 25g Tube',
+      title: '25 gm Master Product Jar',
+      category: 'Product Packshot',
+    },
+    {
+      key: 'frontBack',
+      item: config.images.frontBackJar,
+      title: 'Front & Back Label (Ingredients & Mfg Details)',
+      category: 'Verified Packaging',
     },
     {
       key: 'promo1',
       item: config.images.promoImage1,
-      title: 'Botanical Herb Display',
+      title: 'दाद, खाज, खुजली की असरदार दवाई (Post 1)',
+      category: 'Infographic',
     },
     {
       key: 'promo2',
       item: config.images.promoImage2,
-      title: 'Ayurvedic Pure Ingredients',
+      title: 'दाद का दिव्यास्त्र (Post 2)',
+      category: 'Infographic',
+    },
+    {
+      key: 'pack2',
+      item: config.images.packOf2Image,
+      title: '25 gm Pack of 2 Jars',
+      category: 'Bundle Pack',
+    },
+    {
+      key: 'pack4',
+      item: config.images.packOf4Image,
+      title: '25 gm Pack of 4 Jars (Family Saver)',
+      category: 'Bundle Pack',
+    },
+    {
+      key: 'fifteenGm',
+      item: config.images.fifteenGmImage,
+      title: '15 gm Compact Jar',
+      category: 'Variant Size',
     },
   ];
 
@@ -61,13 +93,8 @@ export const Hero: React.FC<HeroProps> = ({
     ? currentGalleryItem.item.fallback
     : resolveImageUrl(currentGalleryItem.item, config.imageVersion);
 
-  const hasConfiguredPrice =
-    config.price !== null &&
-    config.price !== undefined &&
-    config.price !== '' &&
-    Number(config.price) > 0;
-
-  const unitPrice = hasConfiguredPrice ? Number(config.price) : null;
+  const unitPrice = selectedPack?.price ?? (config.price ? Number(config.price) : null);
+  const unitMrp = selectedPack?.mrp ?? (config.mrp ? Number(config.mrp) : null);
   const totalPrice = unitPrice ? unitPrice * quantity : null;
 
   const hasConfiguredWhatsApp =
@@ -87,21 +114,31 @@ export const Hero: React.FC<HeroProps> = ({
     setImageErrorMap((prev) => ({ ...prev, [index]: true }));
   };
 
+  const handleSelectPack = (pack: ProductPackOption) => {
+    setSelectedPack(pack);
+    // Find matching gallery item if available
+    if (pack.id === '25gm-single') setSelectedImageIndex(0);
+    else if (pack.id === '25gm-pack2') setSelectedImageIndex(4);
+    else if (pack.id === '25gm-pack4') setSelectedImageIndex(5);
+    else if (pack.id === '15gm-single') setSelectedImageIndex(6);
+  };
+
   return (
     <section id="home" className="relative pt-6 pb-16 md:pt-12 md:pb-24 overflow-hidden">
-      {/* Subtle organic background decoration */}
+      {/* Organic background glows */}
       <div className="absolute top-0 right-0 -z-10 w-96 h-96 bg-[#E8EFE9] rounded-full blur-3xl opacity-60 pointer-events-none transform translate-x-1/3 -translate-y-1/3" />
       <div className="absolute bottom-0 left-0 -z-10 w-80 h-80 bg-[#F4EDE0] rounded-full blur-3xl opacity-60 pointer-events-none transform -translate-x-1/3" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14 items-start">
           
           {/* ================================================================= */}
-          {/* LEFT: PRODUCT IMAGE & GALLERY */}
+          {/* LEFT: PRODUCT IMAGE & INTERACTIVE GALLERY */}
           {/* ================================================================= */}
-          <div className="lg:col-span-6 flex flex-col items-center">
-            {/* Main Image Container */}
-            <div className="relative w-full max-w-lg aspect-square bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-[#E9E4D8] group overflow-hidden flex items-center justify-center">
+          <div className="lg:col-span-6 flex flex-col items-center sticky top-24">
+            
+            {/* Main Showcase Image Frame */}
+            <div className="relative w-full max-w-lg aspect-square bg-white rounded-3xl p-4 sm:p-6 shadow-md border border-[#E9E4D8] group overflow-hidden flex items-center justify-center">
               <img
                 src={activeImageUrl}
                 alt={currentGalleryItem.item.alt || config.productName}
@@ -113,21 +150,21 @@ export const Hero: React.FC<HeroProps> = ({
               {/* Lightbox zoom button */}
               <button
                 onClick={() => setLightboxOpen(true)}
-                className="absolute top-4 right-4 p-2 bg-white/90 hover:bg-white text-[#293B30] rounded-full shadow-sm border border-[#E2DDD0] opacity-80 group-hover:opacity-100 transition-opacity"
-                title="Click to expand view"
+                className="absolute top-4 right-4 p-2.5 bg-white/90 hover:bg-white text-[#293B30] rounded-full shadow-md border border-[#E2DDD0] opacity-80 group-hover:opacity-100 transition-opacity"
+                title="Click to view full image in high resolution"
               >
                 <Maximize2 className="w-4 h-4" />
               </button>
 
-              {/* Pack badge tag */}
-              <div className="absolute bottom-4 left-4 bg-[#132B1E]/90 backdrop-blur-xs text-[#FAF8F5] text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-[#2D5A42]">
+              {/* Tag / Category indicator */}
+              <div className="absolute bottom-4 left-4 bg-[#132B1E]/90 backdrop-blur-xs text-[#FAF8F5] text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-[#2D5A42] shadow-sm">
                 <Leaf className="w-3.5 h-3.5 text-[#88C498]" />
-                <span>Pack Size: {config.packSize}</span>
+                <span>{currentGalleryItem.title}</span>
               </div>
             </div>
 
-            {/* Thumbnail Navigation */}
-            <div className="mt-4 flex items-center justify-center gap-3 w-full max-w-lg">
+            {/* Thumbnail Navigation Row */}
+            <div className="mt-4 flex items-center gap-2.5 w-full max-w-lg overflow-x-auto pb-2 scrollbar-thin">
               {galleryItems.map((thumb, index) => {
                 const thumbUrl = imageErrorMap[index]
                   ? thumb.item.fallback
@@ -138,9 +175,9 @@ export const Hero: React.FC<HeroProps> = ({
                   <button
                     key={thumb.key}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`relative w-20 h-20 rounded-xl overflow-hidden bg-white border-2 transition-all p-1 flex items-center justify-center ${
+                    className={`relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden bg-white border-2 transition-all p-1 flex items-center justify-center ${
                       isSelected
-                        ? 'border-[#235E37] ring-2 ring-[#235E37]/20 shadow-sm'
+                        ? 'border-[#235E37] ring-2 ring-[#235E37]/30 shadow-md scale-105'
                         : 'border-[#E4DFD3] hover:border-[#B5C8BA] opacity-80 hover:opacity-100'
                     }`}
                   >
@@ -155,8 +192,9 @@ export const Hero: React.FC<HeroProps> = ({
                 );
               })}
             </div>
-            <p className="text-[11px] text-[#6E8074] mt-2 text-center">
-              Click thumbnails to switch views &bull; High resolution verified product pack
+            
+            <p className="text-[11px] text-[#6E8074] mt-1 text-center">
+              Click any thumbnail to switch &bull; Full resolution product photographs
             </p>
           </div>
 
@@ -166,65 +204,111 @@ export const Hero: React.FC<HeroProps> = ({
           <div className="lg:col-span-6 flex flex-col space-y-6">
             
             {/* Brand Kicker */}
-            <div className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-[#235E37]">
-              <span className="inline-block w-2 h-2 rounded-full bg-[#235E37]" />
-              <span>{config.brandName} &bull; Authentic Ayurvedic Formulation</span>
+            <div className="flex items-center gap-2 text-xs font-bold tracking-wider uppercase text-[#235E37]">
+              <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#235E37]" />
+              <span>{config.companyFullName || config.brandName}</span>
+              <span className="text-[#899D8F]">•</span>
+              <span className="text-[#6D8273]">Mfg. Lic. No: {config.contact.ayurvedicLicenseNo}</span>
             </div>
 
             {/* Product Title & Subtitle */}
             <div>
-              <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#112418] leading-[1.18] tracking-tight font-serif-title">
+              <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-bold text-[#112418] leading-[1.18] tracking-tight font-serif-title">
                 {config.productName}
               </h1>
-              <p className="mt-2 text-sm sm:text-base text-[#465A4E] font-medium">
+              <p className="mt-2 text-base sm:text-lg text-[#1C5331] font-semibold">
                 {config.tagline}
               </p>
             </div>
 
             {/* Factual Short Description */}
-            <p className="text-sm sm:text-base text-[#38483D] leading-relaxed border-l-2 border-[#C5A059] pl-4 bg-[#F5EFE4]/40 py-1 rounded-r-md">
+            <p className="text-sm sm:text-base text-[#38483D] leading-relaxed border-l-3 border-[#235E37] pl-4 bg-[#F5EFE4]/50 py-2 rounded-r-xl">
               {config.heroDescription}
             </p>
 
-            {/* Pack Size & Key Specs */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-[#2D4033] py-2 border-y border-[#E7E1D4]">
-              <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-[#112418]">Pack Size:</span>
-                <span className="bg-[#EFE9DC] px-2 py-0.5 rounded font-medium text-[#1E3628]">
-                  {config.packSize}
-                </span>
+            {/* Key Active Formulation Highlights */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-[#2D4033] py-2">
+              <div className="p-2.5 rounded-xl bg-white border border-[#E7E0D2] text-center">
+                <span className="block font-bold text-sm text-[#18532F]">49%</span>
+                <span className="text-[10px] text-[#55695C]">Alba Bark (कुटज)</span>
               </div>
-              <span className="text-[#B9C6BD]">&bull;</span>
-              <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-[#112418]">Form:</span>
-                <span>Topical Cream</span>
+              <div className="p-2.5 rounded-xl bg-white border border-[#E7E0D2] text-center">
+                <span className="block font-bold text-sm text-[#18532F]">3%</span>
+                <span className="text-[10px] text-[#55695C]">Aloevera Gel</span>
               </div>
-              <span className="text-[#B9C6BD]">&bull;</span>
-              <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-[#112418]">Category:</span>
-                <span>Ayurvedic Proprietary Medicine</span>
+              <div className="p-2.5 rounded-xl bg-white border border-[#E7E0D2] text-center">
+                <span className="block font-bold text-sm text-[#18532F]">0.5%</span>
+                <span className="text-[10px] text-[#55695C]">Curcuma Longa (हल्दी)</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-white border border-[#E7E0D2] text-center">
+                <span className="block font-bold text-sm text-[#18532F]">Day 1</span>
+                <span className="text-[10px] text-[#55695C]">Itch Relief Action</span>
               </div>
             </div>
 
-            {/* Pricing Section (Never fake ₹0) */}
+            {/* Pack Size / Variant Selector */}
+            <div className="space-y-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-[#14291B]">
+                Choose Pack Size / Quantity:
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
+                {config.packOptions.map((pack) => {
+                  const isSelected = selectedPack.id === pack.id;
+                  return (
+                    <button
+                      key={pack.id}
+                      type="button"
+                      onClick={() => handleSelectPack(pack)}
+                      className={`relative p-3.5 rounded-2xl border-2 text-left transition-all flex flex-col justify-between ${
+                        isSelected
+                          ? 'border-[#235E37] bg-[#F3F9F5] shadow-sm ring-1 ring-[#235E37]'
+                          : 'border-[#E2DDD0] bg-white hover:border-[#B7CBBF]'
+                      }`}
+                    >
+                      {pack.badge && (
+                        <span className="absolute -top-2.5 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#1C8A4E] text-white shadow-xs">
+                          {pack.badge}
+                        </span>
+                      )}
+                      <div>
+                        <div className="text-xs font-bold text-[#14291B]">{pack.name}</div>
+                        <div className="text-[11px] text-[#5A6E61]">{pack.size}</div>
+                      </div>
+                      <div className="mt-2 flex items-baseline gap-2">
+                        <span className="text-base font-extrabold text-[#112418]">
+                          {config.currencySymbol}{pack.price}
+                        </span>
+                        {pack.mrp > pack.price && (
+                          <span className="text-xs text-[#829688] line-through">
+                            {config.currencySymbol}{pack.mrp}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Pricing Summary Box */}
             <div className="bg-[#FAF5ED] p-4 sm:p-5 rounded-2xl border border-[#E7DECD] shadow-xs">
               <div className="flex items-baseline justify-between flex-wrap gap-2">
                 <div>
-                  <span className="text-xs uppercase tracking-wider text-[#63756A] font-medium block">
-                    Price per Pack (25g)
+                  <span className="text-xs uppercase tracking-wider text-[#63756A] font-semibold block">
+                    Selected: {selectedPack.name} ({selectedPack.size})
                   </span>
-                  {hasConfiguredPrice ? (
+                  {unitPrice ? (
                     <div className="flex items-baseline gap-3 mt-1">
-                      <span className="text-3xl font-bold text-[#112619] tracking-tight">
+                      <span className="text-3xl font-extrabold text-[#112619] tracking-tight">
                         {config.currencySymbol}{unitPrice}
                       </span>
-                      {config.mrp && Number(config.mrp) > (unitPrice || 0) && (
+                      {unitMrp && unitMrp > unitPrice && (
                         <>
                           <span className="text-base text-[#809486] line-through font-normal">
-                            {config.currencySymbol}{config.mrp}
+                            {config.currencySymbol}{unitMrp}
                           </span>
-                          <span className="text-xs font-semibold text-[#186835] bg-[#E1F3E7] px-2 py-0.5 rounded-md">
-                            Save {config.currencySymbol}{Number(config.mrp) - (unitPrice || 0)}
+                          <span className="text-xs font-bold text-[#186835] bg-[#E1F3E7] px-2 py-0.5 rounded-md">
+                            Save {config.currencySymbol}{unitMrp - unitPrice}
                           </span>
                         </>
                       )}
@@ -234,17 +318,14 @@ export const Hero: React.FC<HeroProps> = ({
                       <span className="text-xl font-bold text-[#1C3627]">
                         Contact us for price
                       </span>
-                      <p className="text-xs text-[#63776A] mt-0.5">
-                        Price confirmed directly during WhatsApp inquiry.
-                      </p>
                     </div>
                   )}
                 </div>
 
-                {/* Sub-total when price configured */}
-                {hasConfiguredPrice && quantity > 1 && (
+                {/* Subtotal calculation */}
+                {unitPrice && quantity > 1 && (
                   <div className="text-right">
-                    <span className="text-xs text-[#63756A]">Order Total ({quantity} packs)</span>
+                    <span className="text-xs text-[#63756A]">Order Total ({quantity} sets)</span>
                     <div className="text-xl font-bold text-[#176633]">
                       {config.currencySymbol}{totalPrice}
                     </div>
@@ -255,8 +336,8 @@ export const Hero: React.FC<HeroProps> = ({
               {/* Quantity Selector */}
               <div className="mt-5 pt-4 border-t border-[#E3D9C4] flex items-center justify-between flex-wrap gap-4">
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-[#2D4033]">
-                    Select Quantity:
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#2D4033]">
+                    Quantity:
                   </span>
                   <div className="flex items-center bg-white border border-[#CDC4B1] rounded-xl overflow-hidden shadow-xs">
                     <button
@@ -289,9 +370,9 @@ export const Hero: React.FC<HeroProps> = ({
                   </div>
                 </div>
 
-                <div className="text-xs text-[#5C6E62] flex items-center gap-1.5">
-                  <Truck className="w-3.5 h-3.5 text-[#235E37]" />
-                  <span>Ships in 24–48 hours</span>
+                <div className="text-xs text-[#5C6E62] flex items-center gap-1.5 font-medium">
+                  <Truck className="w-4 h-4 text-[#235E37]" />
+                  <span>Dispatched in 24–48 hours from Indore / Dewas</span>
                 </div>
               </div>
             </div>
@@ -303,7 +384,7 @@ export const Hero: React.FC<HeroProps> = ({
                 className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl bg-[#1C8A4E] hover:bg-[#167440] active:scale-[0.99] text-white font-bold text-base shadow-md hover:shadow-lg transition-all"
               >
                 <MessageSquare className="w-5 h-5 fill-white" />
-                <span>Buy Now on WhatsApp</span>
+                <span>Buy Now on WhatsApp ({selectedPack.name})</span>
                 <ChevronRight className="w-4 h-4 ml-1 opacity-80" />
               </button>
 
@@ -314,7 +395,7 @@ export const Hero: React.FC<HeroProps> = ({
                 </span>
                 <span className="flex items-center gap-1">
                   <CheckCircle className="w-3.5 h-3.5 text-[#1C8A4E]" />
-                  Direct order verification with team
+                  Verified directly with KOSTAK Healthcare
                 </span>
               </div>
 
@@ -341,7 +422,7 @@ export const Hero: React.FC<HeroProps> = ({
                   href="#product"
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#294B35] hover:text-[#112418] hover:underline"
                 >
-                  <span>View Verified Ingredients & Directions for Use</span>
+                  <span>View Verified Label Ingredients & Directions for Use</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </a>
               </div>
@@ -349,20 +430,20 @@ export const Hero: React.FC<HeroProps> = ({
 
             {/* Trust highlights */}
             <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[#E8E2D4]">
-              <div className="flex flex-col items-center text-center p-2.5 rounded-xl bg-white/70 border border-[#ECE6D8]">
+              <div className="flex flex-col items-center text-center p-2.5 rounded-xl bg-white/80 border border-[#ECE6D8]">
                 <Shield className="w-5 h-5 text-[#235E37] mb-1" />
-                <span className="text-xs font-bold text-[#14291B]">100% Ayurvedic</span>
-                <span className="text-[10px] text-[#6A7D71]">Classical herbs</span>
+                <span className="text-xs font-bold text-[#14291B]">Ayurvedic Proprietary</span>
+                <span className="text-[10px] text-[#6A7D71]">Lic: {config.contact.ayurvedicLicenseNo}</span>
               </div>
-              <div className="flex flex-col items-center text-center p-2.5 rounded-xl bg-white/70 border border-[#ECE6D8]">
+              <div className="flex flex-col items-center text-center p-2.5 rounded-xl bg-white/80 border border-[#ECE6D8]">
                 <Sparkles className="w-5 h-5 text-[#235E37] mb-1" />
-                <span className="text-xs font-bold text-[#14291B]">Topical Relief</span>
-                <span className="text-[10px] text-[#6A7D71]">For fungal itch & daad</span>
+                <span className="text-xs font-bold text-[#14291B]">49% Alba Bark</span>
+                <span className="text-[10px] text-[#6A7D71]">Pure botanical extract</span>
               </div>
-              <div className="flex flex-col items-center text-center p-2.5 rounded-xl bg-white/70 border border-[#ECE6D8]">
+              <div className="flex flex-col items-center text-center p-2.5 rounded-xl bg-white/80 border border-[#ECE6D8]">
                 <Truck className="w-5 h-5 text-[#235E37] mb-1" />
-                <span className="text-xs font-bold text-[#14291B]">Pan-India Shipping</span>
-                <span className="text-[10px] text-[#6A7D71]">Direct dispatch</span>
+                <span className="text-xs font-bold text-[#14291B]">Pan-India Delivery</span>
+                <span className="text-[10px] text-[#6A7D71]">Express courier tracking</span>
               </div>
             </div>
 
@@ -376,26 +457,31 @@ export const Hero: React.FC<HeroProps> = ({
       {/* =================================================================== */}
       {lightboxOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setLightboxOpen(false)}
         >
           <div
-            className="relative max-w-4xl max-h-[90vh] bg-white rounded-2xl p-4 overflow-hidden"
+            className="relative max-w-4xl max-h-[92vh] bg-white rounded-3xl p-4 sm:p-6 overflow-hidden flex flex-col items-center"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setLightboxOpen(false)}
-              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/60 text-white hover:bg-black transition-colors"
+              className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/60 text-white hover:bg-black transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
             <img
               src={activeImageUrl}
               alt={currentGalleryItem.item.alt}
-              className="max-h-[80vh] w-auto mx-auto object-contain"
+              className="max-h-[75vh] w-auto mx-auto object-contain rounded-xl"
             />
-            <div className="text-center mt-3 text-xs text-[#485C4F]">
-              {currentGalleryItem.title} &bull; Pack size: {config.packSize}
+            <div className="text-center mt-3">
+              <span className="text-xs font-bold text-[#14291B] block">
+                {currentGalleryItem.title}
+              </span>
+              <span className="text-[11px] text-[#55695C]">
+                Kostak Healthcare Private Limited &bull; DAAD FREE Ayurvedic Antifungal Cream
+              </span>
             </div>
           </div>
         </div>

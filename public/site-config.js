@@ -3,177 +3,109 @@
  * KOSTAK HEALTHCARE - DAAD FREE PRODUCT WEBSITE CONFIGURATION (site-config.js)
  * =============================================================================
  * 
- * Edit this file to update prices, WhatsApp phone number, images (Google Drive or local),
- * contact information, shipping terms, customer reviews, and legal policies.
- * 
- * NO CODING REQUIRED:
- * - Update the values below inside the quotes or numbers.
- * - Save the file and refresh or redeploy your website.
- * - When using Google Drive for images, follow the instructions in the comments below.
+ * Verified from genuine product packaging:
+ * - Brand: Kostak Healthcare Private Limited
+ * - Product: DAAD FREE Ayurvedic Antifungal Cream (दाद का दिव्यास्त्र)
+ * - Customer Support / WhatsApp: 9131138853
+ * - Price: ₹349 (MRP: ₹380)
+ * - Mfg Lic: MP/D/124/2026
  * =============================================================================
  */
 
 window.DAAD_FREE_CONFIG = {
-  // ---------------------------------------------------------------------------
-  // 1. BRAND & PRODUCT INFORMATION
-  // ---------------------------------------------------------------------------
   brandName: "KOSTAK Healthcare",
+  companyFullName: "Kostak Healthcare Private Limited",
   productName: "DAAD FREE Ayurvedic Antifungal Cream",
-  tagline: "Targeted Ayurvedic Topical Care for Fungal Skin Irritations & Itching",
+  tagline: "दाद का दिव्यास्त्र • दाद, खाज, खुजली की असरदार दवाई",
   packSize: "25 gm",
   
-  /**
-   * Product Price in Indian Rupees (INR):
-   * - Set to a number (e.g. 199 or 249) to display the price and calculate order total.
-   * - Set to null, 0, or "" (empty) if you want the site to display "Contact us for price"
-   *   and omit the price and total from the WhatsApp order message.
-   */
-  price: 199, // Set to null or a number like 199. Never shows a fake zero!
-  mrp: 250, // Optional Maximum Retail Price for discount strikethrough (set to null if not applicable)
+  price: 349, // From official product label
+  mrp: 380,   // From official product label
   currencySymbol: "₹",
 
-  // Short factual description shown in Hero
-  heroDescription: "A classical Ayurvedic formulation crafted with purifying herbs for targeted external soothing relief from skin itching, ringworm (daad), and fungal irritations. Free from artificial dyes and harsh synthetic chemicals.",
+  heroDescription: "An authentic Ayurvedic proprietary formula with 49% Alba Bark (श्वेत कुटज), Curcuma Longa (हल्दी), and Aloe Vera. Provides fast, soothing relief from ringworm (daad), severe itching, and fungal skin distress. Relief from the first day.",
 
-  // ---------------------------------------------------------------------------
-  // 2. WHATSAPP ORDERING CONFIGURATION (NO PAYMENT GATEWAY)
-  // ---------------------------------------------------------------------------
-  /**
-   * WhatsApp Business Number:
-   * - Must include country code without '+' or special symbols (digits only).
-   * - Example for India: "919876543210"
-   * - If left blank or set to "91XXXXXXXXXX", the website will prompt a helpful
-   *   configuration notice for the owner rather than opening a broken link.
-   */
-  whatsAppNumber: "919876543210", // REPLACE WITH YOUR ACTUAL 10-12 DIGIT WHATSAPP NUMBER
-  
-  // Custom greeting message before order details
-  whatsAppGreeting: "Hello KOSTAK Healthcare, I am interested in ordering DAAD FREE Ayurvedic Antifungal Cream, 25 gm.",
+  // WhatsApp number (from packaging label: Customer Support: 9131138853)
+  whatsAppNumber: "919131138853",
+  whatsAppGreeting: "Hello KOSTAK Healthcare, I am interested in ordering DAAD FREE Ayurvedic Antifungal Cream.",
 
-  // ---------------------------------------------------------------------------
-  // 3. PRODUCT IMAGES & GOOGLE DRIVE INTEGRATION
-  // ---------------------------------------------------------------------------
-  /**
-   * CACHE REFRESH / VERSION:
-   * When you update an image in Google Drive using the same file ID,
-   * bump this number (e.g. from 1 to 2) to force visitor browsers to load
-   * the fresh image immediately rather than using their cached version.
-   */
   imageVersion: 1,
 
-  /**
-   * Images can be:
-   * 1. A Google Drive File ID (e.g. "1a2B3c4D5e6F...") or Google Drive sharing link.
-   * 2. A direct local path (e.g. "/assets/images/25 gm_Master_Product_front.jpg.jpeg").
-   * 3. A public web URL (e.g. "https://example.com/my-image.jpg").
-   * 
-   * If a Google Drive link or ID fails to load, the website automatically falls
-   * back to the built-in local asset.
-   */
   images: {
-    // Primary Product Image
     mainImage: {
-      url: "/assets/images/25 gm_Master_Product_front.jpg.jpeg",
-      googleDriveId: "", // Optional: e.g. "1XYZ...abc" from your 'daad-free-main.jpg'
-      alt: "DAAD FREE Ayurvedic Antifungal Cream 25 gm tube and box packaging by KOSTAK Healthcare",
-      fallback: "/assets/images/25 gm_Master_Product_front.jpg.jpeg"
+      url: "/assets/aistudio/25_gm_Master_Product_front.jpg_0667641f.jpeg",
+      googleDriveId: "",
+      alt: "DAAD FREE Ayurvedic Antifungal Cream 25 gm Master Product Jar by Kostak Healthcare",
+      fallback: "/assets/images/25_gm_Master_Product_front.jpg"
     },
-    // Promotional Image 1
+    frontBackJar: {
+      url: "/assets/aistudio/WhatsApp_Image_2026-10-16_at_6.14.44_PM_c6612cd6.jpeg",
+      googleDriveId: "",
+      alt: "DAAD FREE 25 gm front and back label with complete ingredients, directions and manufacturing details",
+      fallback: "/assets/images/25gm_front_and_back_jar.jpeg"
+    },
     promoImage1: {
-      url: "/assets/images/Post1_Option2.jpg.jpeg",
-      googleDriveId: "", // Optional: e.g. "1XYZ...def" from your 'daad-free-promo-1.jpg'
-      alt: "DAAD FREE 25g cream tube on limestone podium with Ayurvedic herbal ingredients",
+      url: "/assets/aistudio/Post1.jpg_6034f5d5.jpeg",
+      googleDriveId: "",
+      alt: "DAAD FREE - दाद, खाज, खुजली की असरदार दवाई - पहले ही दिन से खुजली में राहत",
       fallback: "/assets/images/Post1_Option2.jpg.jpeg"
     },
-    // Promotional Image 2
     promoImage2: {
-      url: "/assets/images/Post2.jpg.jpeg",
-      googleDriveId: "", // Optional: e.g. "1XYZ...ghi" from your 'daad-free-promo-2.jpg'
-      alt: "DAAD FREE Ayurvedic cream with brass bowl of neem and turmeric",
+      url: "/assets/aistudio/Post2.jpg_bef9deeb.jpeg",
+      googleDriveId: "",
+      alt: "DAAD FREE - दाद का दिव्यास्त्र - Fight skin infection, Kill fungus, Relieves itching",
       fallback: "/assets/images/Post2.jpg.jpeg"
+    },
+    packOf2Image: {
+      url: "/assets/aistudio/25_gm_Master_Product_front_Packof2.jpg_976326fb.jpeg",
+      googleDriveId: "",
+      alt: "DAAD FREE 25 gm Pack of 2 Jars",
+      fallback: "/assets/images/25gm_pack_of_2.jpeg"
+    },
+    packOf4Image: {
+      url: "/assets/aistudio/25_gm_Master_Product_front_Packof4.jpg_d3371fa5.jpeg",
+      googleDriveId: "",
+      alt: "DAAD FREE 25 gm Pack of 4 Jars (Family Saver Pack)",
+      fallback: "/assets/images/25gm_pack_of_4.jpeg"
+    },
+    fifteenGmImage: {
+      url: "/assets/aistudio/15gm_Master_Product.jpg_d47597ac.jpeg",
+      googleDriveId: "",
+      alt: "DAAD FREE 15 gm Master Jar",
+      fallback: "/assets/images/15gm_master_product.jpeg"
+    },
+    fifteenGmPack2: {
+      url: "/assets/aistudio/15gm_pack_of_2.jpg_63c7cb40.jpeg",
+      googleDriveId: "",
+      alt: "DAAD FREE 15 gm Pack of 2",
+      fallback: "/assets/images/15gm_pack_of_2.jpeg"
+    },
+    fifteenGmPack4: {
+      url: "/assets/aistudio/15gm_pack_of_4.jpg_a444cbd3.jpeg",
+      googleDriveId: "",
+      alt: "DAAD FREE 15 gm Pack of 4",
+      fallback: "/assets/images/15gm_pack_of_4.jpeg"
     }
   },
 
-  // ---------------------------------------------------------------------------
-  // 4. CUSTOMER REVIEWS & REVIEW VIDEOS
-  // ---------------------------------------------------------------------------
-  /**
-   * COMPLIANCE & HONESTY RULE:
-   * In strict accordance with the owner's mandate, fake reviews are prohibited.
-   * Only genuine reviews with 'approved: true' will be shown on the website.
-   * By default this list starts empty until real customer reviews are approved.
-   */
-  reviews: [
-    /* 
-    Example of an approved review to add when received:
-    {
-      id: "rev-001",
-      customerName: "Ramesh Sharma",
-      city: "Jaipur",
-      rating: 5,
-      date: "2026-10-15",
-      reviewText: "Genuine Ayurvedic cream that provided soothing relief from ringworm itching within days.",
-      approved: true,
-      photoUrl: ""
-    }
-    */
-  ],
+  reviews: [],
+  reviewVideos: [],
 
-  /**
-   * Approved Review Videos:
-   * Only videos with 'approved: true' are shown in the video section.
-   * Supports direct MP4 video URLs or YouTube links (e.g. "https://www.youtube.com/watch?v=...").
-   * Videos NEVER autoplay with sound.
-   */
-  reviewVideos: [
-    /*
-    Example approved video:
-    {
-      id: "vid-001",
-      title: "Real Customer Feedback on DAAD FREE",
-      customerName: "Verified Customer",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", // or direct MP4 URL / Google Drive video
-      thumbnailUrl: "/assets/images/daad-free-promo-1.jpg",
-      approved: true
-    }
-    */
-  ],
-
-  // ---------------------------------------------------------------------------
-  // 5. BUSINESS & CONTACT DETAILS
-  // ---------------------------------------------------------------------------
   contact: {
-    brand: "KOSTAK Healthcare",
+    brand: "Kostak Healthcare Private Limited",
     email: "kostakhealthcare@gmail.com",
+    phone: "9131138853",
     supportHours: "Monday to Saturday, 9:00 AM – 7:00 PM IST",
-    address: "India",
-    ayurvedicLicenseNo: "Approved Ayurvedic Proprietary Medicine (See packaging for Lic. No & Batch)"
+    officeAddress: "138/139 B, Shriram Nagar, Khajrana, Indore, M.P. 452016",
+    mfgAddress: "Village Paal Nagar, Dewas, M.P. 455001",
+    ayurvedicLicenseNo: "MP/D/124/2026",
+    batchNo: "Dt092601",
+    expiryPeriod: "Best before 36 months from Mfg Date"
   },
 
-  // ---------------------------------------------------------------------------
-  // 6. SHIPPING & DELIVERY INFORMATION
-  // ---------------------------------------------------------------------------
   shipping: {
     dispatchTime: "Dispatched within 24 to 48 business hours after order confirmation via WhatsApp.",
-    deliveryTimeline: "Estimated delivery within 3–7 business days depending on location.",
-    chargesNote: "Standard shipping charges or free shipping threshold will be confirmed directly during your WhatsApp chat."
-  },
-
-  // ---------------------------------------------------------------------------
-  // 7. POLICIES & LEGAL TERMS (CONFIGURABLE BY OWNER)
-  // ---------------------------------------------------------------------------
-  policies: {
-    privacyPolicy: `KOSTAK Healthcare respects your privacy. When you contact us or order through WhatsApp, we collect only the necessary details (such as your name, delivery address, and contact number) required to process and fulfill your order. We do not sell, rent, or trade your personal information with any third party. Your communication remains confidential between you and KOSTAK Healthcare.`,
-
-    termsAndConditions: `1. Ordering Process: Clicking "Buy Now on WhatsApp" initiates a direct inquiry. An order is only confirmed once availability and shipping details are verified and mutually agreed upon with KOSTAK Healthcare via WhatsApp.
-2. Product Use: DAAD FREE is an Ayurvedic proprietary formulation for external topical use only. It should be used strictly according to directions on the packaging or as advised by an Ayurvedic physician.
-3. No Medical Guarantee: Results may vary depending on individual skin type and condition. DAAD FREE does not claim to cure internal systemic diseases or replace professional medical advice for severe conditions.
-4. Changes to Terms: KOSTAK Healthcare reserves the right to update product pricing and policy terms without prior notice.`,
-
-    shippingPolicy: `Orders are packed and dispatched via trusted domestic courier services within 24–48 business hours after WhatsApp confirmation. Delivery typically takes 3 to 7 business days across India. Tracking information will be shared directly on WhatsApp upon shipment.`,
-
-    cancellationAndRefundPolicy: `1. Cancellation: You may cancel your order at any time before it has been dispatched by notifying us on WhatsApp.
-2. Returns: Due to hygiene, personal care, and safety standards for topical healthcare products, opened or used cream tubes cannot be returned.
-3. Damaged or Wrong Item: If you receive a damaged package or an incorrect product, notify us on WhatsApp within 48 hours of delivery with photos/unboxing video, and we will arrange a prompt replacement or refund.`
+    deliveryTimeline: "Estimated delivery within 3–7 business days across India.",
+    chargesNote: "Shipping charges or free delivery will be confirmed directly during WhatsApp order verification."
   }
 };

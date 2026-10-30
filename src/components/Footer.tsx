@@ -129,11 +129,17 @@ export const Footer: React.FC<FooterProps> = ({
                 {config.contact.email}
               </a>
             </p>
+            <p className="text-[11px] text-[#A2BBAA]">
+              Phone / WhatsApp: <a href="tel:+919131138853" className="text-white hover:underline font-bold">+91 {config.contact.phone || '9131138853'}</a>
+            </p>
             <p className="text-[11px] text-[#869E8F] leading-relaxed">
               Support: {config.contact.supportHours}
             </p>
             <p className="text-[11px] text-[#869E8F]">
-              Lic: {config.contact.ayurvedicLicenseNo || 'Ayurvedic Proprietary Medicine'}
+              Office: {config.contact.officeAddress || 'Khajrana, Indore, M.P.'}
+            </p>
+            <p className="text-[11px] text-[#869E8F]">
+              Lic: {config.contact.ayurvedicLicenseNo || 'MP/D/124/2026'}
             </p>
           </div>
 

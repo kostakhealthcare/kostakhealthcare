@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Mail, Clock, MapPin, Truck, MessageSquare, ShieldCheck, Check } from 'lucide-react';
+import { Mail, Clock, MapPin, Truck, MessageSquare, ShieldCheck, PhoneCall, Building2 } from 'lucide-react';
 import { SiteConfig } from '../config';
 
 interface ContactAndShippingProps {
@@ -26,10 +26,10 @@ export const ContactAndShipping: React.FC<ContactAndShippingProps> = ({
             Direct Customer Support
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-[#112418] mt-2 font-serif-title">
-            Connect with KOSTAK Healthcare
+            Connect with {config.companyFullName || config.brandName}
           </h2>
           <p className="mt-2 text-sm sm:text-base text-[#4E6255]">
-            We are here to assist with product inquiries, wholesale orders, and delivery assistance.
+            We are here to assist with product inquiries, delivery status, and bulk orders across India.
           </p>
         </div>
 
@@ -42,12 +42,29 @@ export const ContactAndShipping: React.FC<ContactAndShippingProps> = ({
             </h3>
 
             <div className="space-y-4 text-xs sm:text-sm text-[#3E5244]">
+              {/* Phone / Customer Support */}
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
+                  <PhoneCall className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="font-semibold text-[#14291B] block">Customer Support &amp; Orders</span>
+                  <a
+                    href={`tel:+91${config.contact.phone || '9131138853'}`}
+                    className="text-[#235E37] hover:underline font-bold"
+                  >
+                    +91 {config.contact.phone || '9131138853'}
+                  </a>
+                </div>
+              </div>
+
+              {/* Email */}
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="font-semibold text-[#14291B] block">Email Support</span>
+                  <span className="font-semibold text-[#14291B] block">Email Inquiries</span>
                   <a
                     href={`mailto:${config.contact.email}`}
                     className="text-[#235E37] hover:underline break-all"
@@ -57,34 +74,52 @@ export const ContactAndShipping: React.FC<ContactAndShippingProps> = ({
                 </div>
               </div>
 
+              {/* Hours */}
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
                   <Clock className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="font-semibold text-[#14291B] block">Operational Hours</span>
+                  <span className="font-semibold text-[#14291B] block">Support Hours</span>
                   <span>{config.contact.supportHours}</span>
                 </div>
               </div>
 
+              {/* Office Address */}
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
+                  <Building2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="font-semibold text-[#14291B] block">Registered Office</span>
+                  <span className="text-xs text-[#526658]">
+                    {config.contact.officeAddress || '138/139 B, Shriram Nagar, Khajrana, Indore, M.P. 452016'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Mfg Address */}
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="font-semibold text-[#14291B] block">Location</span>
-                  <span>{config.contact.address}</span>
+                  <span className="font-semibold text-[#14291B] block">Manufacturing Unit</span>
+                  <span className="text-xs text-[#526658]">
+                    {config.contact.mfgAddress || 'Village Paal Nagar, Dewas, M.P. 455001'}
+                  </span>
                 </div>
               </div>
 
+              {/* Lic & Batch */}
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="font-semibold text-[#14291B] block">Product License</span>
-                  <span className="text-xs text-[#526658]">
-                    {config.contact.ayurvedicLicenseNo || 'Ayurvedic Proprietary Medicine'}
+                  <span className="font-semibold text-[#14291B] block">Ayurvedic Manufacturing License</span>
+                  <span className="text-xs text-[#1F5433] font-mono font-bold">
+                    {config.contact.ayurvedicLicenseNo}
                   </span>
                 </div>
               </div>
@@ -93,19 +128,19 @@ export const ContactAndShipping: React.FC<ContactAndShippingProps> = ({
             <div className="pt-2">
               <button
                 onClick={onOrderWhatsApp}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#1C8A4E] hover:bg-[#15723F] text-white text-xs sm:text-sm font-semibold transition-colors shadow-xs"
+                className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-[#1C8A4E] hover:bg-[#15723F] text-white text-xs sm:text-sm font-bold transition-colors shadow-xs"
               >
                 <MessageSquare className="w-4 h-4 fill-white" />
-                <span>Message on WhatsApp</span>
+                <span>Message on WhatsApp (+91 {config.contact.phone})</span>
               </button>
             </div>
           </div>
 
-          {/* Shipping & Delivery Highlights */}
+          {/* Shipping & Delivery Details */}
           <div className="lg:col-span-7 bg-[#FAF8F5] p-6 sm:p-8 rounded-3xl border border-[#E9E2D4] space-y-6">
             <h3 className="text-lg font-bold text-[#112418] font-serif-title flex items-center gap-2">
               <Truck className="w-5 h-5 text-[#235E37]" />
-              <span>Shipping & Delivery Policy</span>
+              <span>Fast Pan-India Express Delivery</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -129,25 +164,25 @@ export const ContactAndShipping: React.FC<ContactAndShippingProps> = ({
             </div>
 
             <div className="p-4 rounded-2xl bg-[#F4EDE0] border border-[#E3D9C5] text-xs text-[#485C4F] space-y-1.5">
-              <span className="font-bold text-[#162B1E] block">Delivery Terms & WhatsApp Confirmation</span>
+              <span className="font-bold text-[#162B1E] block">Courier Tracking &amp; WhatsApp Updates</span>
               <p>{config.shipping.chargesNote}</p>
               <p className="text-[11px] text-[#63776A]">
-                Once your order is booked, your tracking ID and courier link will be provided directly on your WhatsApp chat.
+                Once your order is booked, your real-time tracking number and courier link will be provided directly on your WhatsApp chat.
               </p>
             </div>
 
             <div className="grid grid-cols-3 gap-2 text-center text-xs text-[#3D5244] pt-2">
               <div className="p-2.5 rounded-xl bg-white border border-[#EDE7DB]">
-                <span className="font-bold text-[#14291B] block">Safe Packaging</span>
-                <span className="text-[10px] text-[#697D70]">Tamper-evident</span>
+                <span className="font-bold text-[#14291B] block">Tamper Sealed</span>
+                <span className="text-[10px] text-[#697D70]">Protective lid</span>
               </div>
               <div className="p-2.5 rounded-xl bg-white border border-[#EDE7DB]">
-                <span className="font-bold text-[#14291B] block">Trackable</span>
-                <span className="text-[10px] text-[#697D70]">Active updates</span>
+                <span className="font-bold text-[#14291B] block">100% Original</span>
+                <span className="text-[10px] text-[#697D70]">Direct from factory</span>
               </div>
               <div className="p-2.5 rounded-xl bg-white border border-[#EDE7DB]">
-                <span className="font-bold text-[#14291B] block">Customer Care</span>
-                <span className="text-[10px] text-[#697D70]">Direct WhatsApp</span>
+                <span className="font-bold text-[#14291B] block">Support Phone</span>
+                <span className="text-[10px] text-[#697D70]">9131138853</span>
               </div>
             </div>
           </div>

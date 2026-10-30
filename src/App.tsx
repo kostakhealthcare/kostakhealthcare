@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { loadSiteConfig, SiteConfig, CustomerReview } from './config';
+import { loadSiteConfig, SiteConfig, CustomerReview, ProductPackOption } from './config';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { ProductInformation } from './components/ProductInformation';
@@ -20,6 +20,18 @@ import { Footer } from './components/Footer';
 
 export default function App() {
   const [config, setConfig] = useState<SiteConfig>(() => loadSiteConfig());
+  const [selectedPack, setSelectedPack] = useState<ProductPackOption>(
+    () => config.packOptions?.[0] || {
+      id: "25gm-single",
+      name: "Single Jar (Standard)",
+      size: "25 gm",
+      quantityInPack: 1,
+      price: 349,
+      mrp: 380,
+      imageUrl: "/assets/aistudio/25_gm_Master_Product_front.jpg_0667641f.jpeg",
+      badge: "Most Popular",
+    }
+  );
   const [quantity, setQuantity] = useState<number>(1);
   const [policyModalOpen, setPolicyModalOpen] = useState<boolean>(false);
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyType>('privacyPolicy');
@@ -29,7 +41,11 @@ export default function App() {
   // Sync with window.DAAD_FREE_CONFIG if dynamically injected
   useEffect(() => {
     const handleStorageChange = () => {
-      setConfig(loadSiteConfig());
+      const freshConfig = loadSiteConfig();
+      setConfig(freshConfig);
+      if (freshConfig.packOptions?.[0]) {
+        setSelectedPack(freshConfig.packOptions[0]);
+      }
     };
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
@@ -52,51 +68,43 @@ export default function App() {
       return;
     }
 
-    const hasConfiguredPrice =
-      config.price !== null &&
-      config.price !== undefined &&
-      config.price !== '' &&
-      Number(config.price) > 0;
-
-    const unitPrice = hasConfiguredPrice ? Number(config.price) : null;
+    const unitPrice = selectedPack?.price ?? (config.price ? Number(config.price) : null);
     const totalPrice = unitPrice ? unitPrice * quantity : null;
 
-    // Build pre-filled message strictly as specified
-    const greeting = config.whatsAppGreeting || `Hello ${config.brandName}, I am interested in ordering ${config.productName}, ${config.packSize}.`;
+    // Build pre-filled message strictly as specified with actual pack option details
+    const greeting = config.whatsAppGreeting || `Hello ${config.brandName}, I am interested in ordering ${config.productName}.`;
     
     let messageText = `${greeting}\n\n`;
     messageText += `• Product: ${config.productName}\n`;
-    messageText += `• Pack Size: ${config.packSize}\n`;
+    messageText += `• Selected Pack: ${selectedPack.name} (${selectedPack.size})\n`;
     messageText += `• Quantity: ${quantity}\n`;
 
-    if (hasConfiguredPrice && unitPrice && totalPrice) {
+    if (unitPrice && totalPrice) {
       messageText += `• Unit Price: ${config.currencySymbol}${unitPrice}\n`;
-      messageText += `• Estimated Total: ${config.currencySymbol}${totalPrice} (excluding shipping if applicable)\n`;
+      messageText += `• Order Total: ${config.currencySymbol}${totalPrice} (excluding shipping if applicable)\n`;
     }
 
     const currentUrl = typeof window !== 'undefined' ? window.location.href.split('#')[0] : '';
     if (currentUrl) {
-      messageText += `• Product Page: ${currentUrl}\n\n`;
+      messageText += `• Webpage Link: ${currentUrl}\n\n`;
     } else {
       messageText += `\n`;
     }
 
-    messageText += `Please confirm availability, final price, and delivery details.`;
+    messageText += `Please confirm availability, delivery timeline, and payment details.`;
 
     const encodedText = encodeURIComponent(messageText);
     const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedText}`;
 
-    // Open WhatsApp in current or new window
+    // Open WhatsApp
     window.location.href = whatsappUrl;
   };
 
   const handleReviewSubmitted = (newReview: CustomerReview) => {
-    // Save to reviews queue in config (approved: false)
     const updatedReviews = [...(config.reviews || []), newReview];
     const updatedConfig = { ...config, reviews: updatedReviews };
     setConfig(updatedConfig);
 
-    // Save to localStorage so owner can immediately review it
     try {
       localStorage.setItem('KOSTAK_DAAD_FREE_CONFIG', JSON.stringify(updatedConfig));
     } catch {
@@ -150,19 +158,21 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-grow">
-        {/* Hero Section */}
+        {/* Hero Section with genuine packaging showcase and pack selector */}
         <Hero
           config={config}
           quantity={quantity}
           setQuantity={setQuantity}
+          selectedPack={selectedPack}
+          setSelectedPack={setSelectedPack}
           onOrderWhatsApp={handleOrderWhatsApp}
           onOpenOwnerConfig={() => setOwnerConfigOpen(true)}
         />
 
-        {/* Product Information */}
+        {/* Product Information with verified label ingredients and directions */}
         <ProductInformation config={config} />
 
-        {/* Product Benefits */}
+        {/* Product Benefits with official infographics */}
         <ProductBenefits config={config} />
 
         {/* Customer Reviews (starts empty until approved) */}
@@ -180,7 +190,7 @@ export default function App() {
         {/* FAQ Section */}
         <FaqSection config={config} />
 
-        {/* Contact and Shipping */}
+        {/* Contact and Shipping with genuine addresses */}
         <ContactAndShipping
           config={config}
           onOrderWhatsApp={handleOrderWhatsApp}
