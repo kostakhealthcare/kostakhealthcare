@@ -117,19 +117,40 @@ window.DAAD_FREE_CONFIG = {
 
 ## 4. WhatsApp Ordering Configuration
 
-1. In `site-config.js`, set `whatsAppNumber` to your business phone number with country code (e.g., `919876543210`).
-2. When a customer clicks **"Buy Now on WhatsApp"**, it automatically creates the official click-to-chat URL:
-   ```text
-   https://wa.me/919876543210?text=Hello%20KOSTAK%20Healthcare...
-   ```
-3. Pre-filled text includes:
-   - Product name: DAAD FREE Ayurvedic Antifungal Cream
-   - Pack size: 25 gm
-   - Selected quantity
-   - Unit price & Total (if price is configured)
-   - Exact product webpage link
-   - Request for delivery & payment details.
-4. **Safety feature**: If the WhatsApp number is not yet configured, the website alerts the owner to enter their phone number instead of sending customers to a broken URL.
+The website includes a centralized WhatsApp Business ordering workflow:
+
+### Official WhatsApp Business Credentials:
+- **Country**: India
+- **Country Code**: `+91`
+- **WhatsApp Support Number**: `9131138853`
+- **Full WhatsApp Integration Number**: `919131138853`
+- **Official Click-to-Chat Base URL**: `https://wa.me/919131138853`
+
+### Central Configuration Files:
+- `src/whatsapp-config.ts` (React app single source of truth)
+- `site-config.js` and `public/site-config.js` (Non-coding static configuration)
+
+### Standard Customer Order Message:
+When a customer clicks **"Order on WhatsApp"** or **"Buy Now"**, it opens WhatsApp with this prefilled format:
+
+```text
+Hello DAAD FREE Team,
+I want to place an order.
+
+Product: DAAD FREE Ayurvedic Antifungal Cream
+Size: [Size - 15g or 25g]
+Pack: [Pack - Single, Pack of 2, or Pack of 4]
+Quantity: [Quantity]
+Total Amount: [Amount]
+
+Please confirm my order and delivery details.
+```
+
+### Universal Device Compatibility:
+The `https://wa.me/919131138853?text=...` format is fully tested and supported on:
+- **Android**: Opens directly in native WhatsApp application.
+- **iPhone / iOS (Safari, Chrome)**: Opens native WhatsApp via Universal Links without popup warnings.
+- **Desktop (Windows, Mac, Linux)**: Opens WhatsApp Web or Desktop application.
 
 ---
 
@@ -215,12 +236,12 @@ npm run dev -- --host
 
 *(Alternatively, connect your GitHub repository to Netlify and set Build command: `npm run build`, Publish directory: `dist`)*.
 
-### Option B: Deploying to Vercel
-1. Log in to [Vercel](https://vercel.com/).
-2. Click **Add New &rarr; Project** and select your GitHub repository.
-3. Framework Preset: **Vite**.
-4. Output Directory: `dist`.
-5. Click **Deploy**.
+### Option B: Deploying to Vercel (Ready & Pre-Configured)
+1. The project already includes `vercel.json` with framework preset `vite`, output directory `dist`, and SPA rewrites.
+2. Peer dependencies for `esbuild ^0.28.0` and `vite 8.3.5` are 100% harmonized; Vercel builds pass with zero `ERESOLVE` errors.
+3. In [Vercel](https://vercel.com/), click **Add New &rarr; Project** and select your repository.
+4. Framework Preset will auto-detect as **Vite** with build command `npm run build`.
+5. Click **Deploy**. Your custom domain (`daadfree.com` or `kostakhealthcare.com`) can be linked immediately in Vercel project settings.
 
 ### Option C: Deploying to GitHub Pages
 1. In `vite.config.ts`, set `base: './'` for relative asset paths if hosting under a repository subdirectory.

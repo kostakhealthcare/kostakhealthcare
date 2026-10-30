@@ -6,8 +6,11 @@
  * Verified from genuine product packaging:
  * - Brand: Kostak Healthcare Private Limited
  * - Product: DAAD FREE Ayurvedic Antifungal Cream (दाद का दिव्यास्त्र)
+ * - Country: India (+91)
  * - Customer Support / WhatsApp: 9131138853
- * - Price: ₹349 (MRP: ₹380)
+ * - Full WhatsApp Number: 919131138853
+ * - WhatsApp Click-to-Chat URL: https://wa.me/919131138853
+ * - Price: ₹349 (MRP: ₹380) for 25 gm
  * - Mfg Lic: MP/D/124/2026
  * =============================================================================
  */
@@ -25,9 +28,19 @@ window.DAAD_FREE_CONFIG = {
 
   heroDescription: "An authentic Ayurvedic proprietary formula with 49% Alba Bark (श्वेत कुटज), Curcuma Longa (हल्दी), and Aloe Vera. Provides fast, soothing relief from ringworm (daad), severe itching, and fungal skin distress. Relief from the first day.",
 
-  // WhatsApp number (from packaging label: Customer Support: 9131138853)
+  // Central WhatsApp Business Details
+  whatsAppBusiness: {
+    country: "India",
+    countryCode: "+91",
+    whatsappNumber: "9131138853",
+    fullWhatsAppNumber: "919131138853",
+    clickToChatUrl: "https://wa.me/919131138853",
+    brandTeamName: "DAAD FREE Team"
+  },
+
+  // Primary WhatsApp number used for all order buttons
   whatsAppNumber: "919131138853",
-  whatsAppGreeting: "Hello KOSTAK Healthcare, I am interested in ordering DAAD FREE Ayurvedic Antifungal Cream.",
+  whatsAppGreeting: "Hello DAAD FREE Team,\nI want to place an order.",
 
   imageVersion: 1,
 
@@ -87,6 +100,87 @@ window.DAAD_FREE_CONFIG = {
       fallback: "/assets/images/15gm_pack_of_4.jpeg"
     }
   },
+
+  packOptions: [
+    {
+      id: "25gm-single",
+      name: "Single Jar (Standard)",
+      size: "25g",
+      sizeCategory: "25g",
+      packType: "single",
+      packLabel: "Single",
+      quantityInPack: 1,
+      price: 349,
+      mrp: 380,
+      imageUrl: "/assets/aistudio/25_gm_Master_Product_front.jpg_0667641f.jpeg",
+      badge: "Most Popular"
+    },
+    {
+      id: "25gm-pack2",
+      name: "Pack of 2 Jars",
+      size: "25g",
+      sizeCategory: "25g",
+      packType: "pack2",
+      packLabel: "Pack of 2",
+      quantityInPack: 2,
+      price: 649,
+      mrp: 760,
+      imageUrl: "/assets/aistudio/25_gm_Master_Product_front_Packof2.jpg_976326fb.jpeg",
+      badge: "Save ₹111"
+    },
+    {
+      id: "25gm-pack4",
+      name: "Pack of 4 Jars (Family Saver)",
+      size: "25g",
+      sizeCategory: "25g",
+      packType: "pack4",
+      packLabel: "Pack of 4",
+      quantityInPack: 4,
+      price: 1199,
+      mrp: 1520,
+      imageUrl: "/assets/aistudio/25_gm_Master_Product_front_Packof4.jpg_d3371fa5.jpeg",
+      badge: "Best Value (Save ₹321)"
+    },
+    {
+      id: "15gm-single",
+      name: "Compact Jar (Travel Friendly)",
+      size: "15g",
+      sizeCategory: "15g",
+      packType: "single",
+      packLabel: "Single",
+      quantityInPack: 1,
+      price: 249,
+      mrp: 280,
+      imageUrl: "/assets/aistudio/15gm_Master_Product.jpg_d47597ac.jpeg",
+      badge: "Travel Size"
+    },
+    {
+      id: "15gm-pack2",
+      name: "Pack of 2 Jars (15g x 2)",
+      size: "15g",
+      sizeCategory: "15g",
+      packType: "pack2",
+      packLabel: "Pack of 2",
+      quantityInPack: 2,
+      price: 469,
+      mrp: 560,
+      imageUrl: "/assets/aistudio/15gm_pack_of_2.jpg_63c7cb40.jpeg",
+      badge: "Save ₹91"
+    },
+    {
+      id: "15gm-pack4",
+      name: "Pack of 4 Jars (15g x 4)",
+      size: "15g",
+      sizeCategory: "15g",
+      packType: "pack4",
+      packLabel: "Pack of 4",
+      quantityInPack: 4,
+      price: 879,
+      mrp: 1120,
+      imageUrl: "/assets/aistudio/15gm_pack_of_4.jpg_a444cbd3.jpeg",
+      badge: "Economy Saver"
+    }
+  ],
 
   reviews: [],
   reviewVideos: [],

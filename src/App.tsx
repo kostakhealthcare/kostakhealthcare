@@ -4,7 +4,14 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { loadSiteConfig, SiteConfig, CustomerReview, ProductPackOption } from './config';
+import {
+  loadSiteConfig,
+  SiteConfig,
+  CustomerReview,
+  ProductPackOption,
+  WHATSAPP_BUSINESS,
+  generateWhatsAppOrderUrl,
+} from './config';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { ProductInformation } from './components/ProductInformation';
@@ -58,46 +65,51 @@ export default function App() {
 
   /**
    * Generates and triggers the official WhatsApp click-to-chat order URL
+   * Opens WhatsApp with prefilled message format required by store:
+   * Hello DAAD FREE Team,
+   * I want to place an order.
+   * Product: [Product Name]
+   * Size: [Size]
+   * Pack: [Pack]
+   * Quantity: [Quantity]
+   * Total Amount: [Amount]
+   * Please confirm my order and delivery details.
    */
-  const handleOrderWhatsApp = () => {
-    const cleanNumber = (config.whatsAppNumber || '').replace(/[^\d]/g, '');
+  const handleOrderWhatsApp = (customPack?: ProductPackOption, customQty?: number) => {
+    const packToOrder = customPack || selectedPack;
+    const qty = customQty != null ? customQty : quantity;
+    const cleanNumber = (config.whatsAppNumber || WHATSAPP_BUSINESS.fullNumber || '').replace(/[^\d]/g, '');
 
     // Validate phone number
-    if (!cleanNumber || cleanNumber.length < 10 || config.whatsAppNumber.includes('XXXX')) {
+    if (!cleanNumber || cleanNumber.length < 10 || cleanNumber.includes('XXXX')) {
       setMissingPhoneAlert(true);
       return;
     }
 
-    const unitPrice = selectedPack?.price ?? (config.price ? Number(config.price) : null);
-    const totalPrice = unitPrice ? unitPrice * quantity : null;
+    const unitPrice = packToOrder?.price ?? (config.price ? Number(config.price) : null);
+    const totalPrice = unitPrice ? unitPrice * qty : null;
 
-    // Build pre-filled message strictly as specified with actual pack option details
-    const greeting = config.whatsAppGreeting || `Hello ${config.brandName}, I am interested in ordering ${config.productName}.`;
-    
-    let messageText = `${greeting}\n\n`;
-    messageText += `• Product: ${config.productName}\n`;
-    messageText += `• Selected Pack: ${selectedPack.name} (${selectedPack.size})\n`;
-    messageText += `• Quantity: ${quantity}\n`;
+    const whatsappUrl = generateWhatsAppOrderUrl({
+      productName: config.productName || 'DAAD FREE Ayurvedic Antifungal Cream',
+      size: packToOrder?.size || '25g',
+      pack: packToOrder?.packLabel || packToOrder?.name || 'Single',
+      quantity: qty,
+      unitPrice,
+      totalAmount: totalPrice,
+      currencySymbol: config.currencySymbol || '₹',
+      customWhatsAppNumber: cleanNumber,
+    });
 
-    if (unitPrice && totalPrice) {
-      messageText += `• Unit Price: ${config.currencySymbol}${unitPrice}\n`;
-      messageText += `• Order Total: ${config.currencySymbol}${totalPrice} (excluding shipping if applicable)\n`;
+    // Cross-platform open:
+    // Try window.open first, if blocked or in mobile context fallback to location.href
+    try {
+      const opened = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+        window.location.href = whatsappUrl;
+      }
+    } catch {
+      window.location.href = whatsappUrl;
     }
-
-    const currentUrl = typeof window !== 'undefined' ? window.location.href.split('#')[0] : '';
-    if (currentUrl) {
-      messageText += `• Webpage Link: ${currentUrl}\n\n`;
-    } else {
-      messageText += `\n`;
-    }
-
-    messageText += `Please confirm availability, delivery timeline, and payment details.`;
-
-    const encodedText = encodeURIComponent(messageText);
-    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedText}`;
-
-    // Open WhatsApp
-    window.location.href = whatsappUrl;
   };
 
   const handleReviewSubmitted = (newReview: CustomerReview) => {

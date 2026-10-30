@@ -15,9 +15,16 @@ import {
   X,
   AlertTriangle,
   CheckCircle,
-  Tag,
+  Eye,
+  Info,
 } from 'lucide-react';
-import { SiteConfig, resolveImageUrl, ProductImageConfig, ProductPackOption } from '../config';
+import {
+  SiteConfig,
+  resolveImageUrl,
+  ProductImageConfig,
+  ProductPackOption,
+  generateOrderMessage,
+} from '../config';
 
 interface HeroProps {
   config: SiteConfig;
@@ -25,7 +32,7 @@ interface HeroProps {
   setQuantity: React.Dispatch<React.SetStateAction<number>>;
   selectedPack: ProductPackOption;
   setSelectedPack: React.Dispatch<React.SetStateAction<ProductPackOption>>;
-  onOrderWhatsApp: () => void;
+  onOrderWhatsApp: (pack?: ProductPackOption, qty?: number) => void;
   onOpenOwnerConfig: () => void;
 }
 
@@ -41,14 +48,46 @@ export const Hero: React.FC<HeroProps> = ({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [imageErrorMap, setImageErrorMap] = useState<Record<number, boolean>>({});
+  const [activeSizeFilter, setActiveSizeFilter] = useState<'25g' | '15g'>('25g');
+  const [showMessagePreview, setShowMessagePreview] = useState(false);
 
-  // Full gallery items using the actual uploaded product images
+  // Full gallery items using all authentic user uploaded product photographs
   const galleryItems: { key: string; item: ProductImageConfig; title: string; category: string }[] = [
     {
-      key: 'main',
+      key: '25g-single',
       item: config.images.mainImage,
       title: '25 gm Master Product Jar',
       category: 'Product Packshot',
+    },
+    {
+      key: '25g-pack2',
+      item: config.images.packOf2Image,
+      title: '25 gm Pack of 2 Jars',
+      category: 'Bundle Pack',
+    },
+    {
+      key: '25g-pack4',
+      item: config.images.packOf4Image,
+      title: '25 gm Pack of 4 Jars (Family Saver)',
+      category: 'Bundle Pack',
+    },
+    {
+      key: '15g-single',
+      item: config.images.fifteenGmImage,
+      title: '15 gm Compact Jar',
+      category: 'Variant Size',
+    },
+    {
+      key: '15g-pack2',
+      item: config.images.fifteenGmPack2,
+      title: '15 gm Pack of 2 Jars',
+      category: 'Bundle Pack',
+    },
+    {
+      key: '15g-pack4',
+      item: config.images.fifteenGmPack4,
+      title: '15 gm Pack of 4 Jars (Value Pack)',
+      category: 'Bundle Pack',
     },
     {
       key: 'frontBack',
@@ -67,24 +106,6 @@ export const Hero: React.FC<HeroProps> = ({
       item: config.images.promoImage2,
       title: 'दाद का दिव्यास्त्र (Post 2)',
       category: 'Infographic',
-    },
-    {
-      key: 'pack2',
-      item: config.images.packOf2Image,
-      title: '25 gm Pack of 2 Jars',
-      category: 'Bundle Pack',
-    },
-    {
-      key: 'pack4',
-      item: config.images.packOf4Image,
-      title: '25 gm Pack of 4 Jars (Family Saver)',
-      category: 'Bundle Pack',
-    },
-    {
-      key: 'fifteenGm',
-      item: config.images.fifteenGmImage,
-      title: '15 gm Compact Jar',
-      category: 'Variant Size',
     },
   ];
 
@@ -116,12 +137,49 @@ export const Hero: React.FC<HeroProps> = ({
 
   const handleSelectPack = (pack: ProductPackOption) => {
     setSelectedPack(pack);
-    // Find matching gallery item if available
+    if (pack.sizeCategory) {
+      setActiveSizeFilter(pack.sizeCategory);
+    }
+    // Match corresponding gallery item
     if (pack.id === '25gm-single') setSelectedImageIndex(0);
-    else if (pack.id === '25gm-pack2') setSelectedImageIndex(4);
-    else if (pack.id === '25gm-pack4') setSelectedImageIndex(5);
-    else if (pack.id === '15gm-single') setSelectedImageIndex(6);
+    else if (pack.id === '25gm-pack2') setSelectedImageIndex(1);
+    else if (pack.id === '25gm-pack4') setSelectedImageIndex(2);
+    else if (pack.id === '15gm-single') setSelectedImageIndex(3);
+    else if (pack.id === '15gm-pack2') setSelectedImageIndex(4);
+    else if (pack.id === '15gm-pack4') setSelectedImageIndex(5);
   };
+
+  const handleFilterSize = (size: '25g' | '15g') => {
+    setActiveSizeFilter(size);
+    // Find matching pack in this size
+    const currentPackType = selectedPack.packType || 'single';
+    const matchingPack =
+      config.packOptions.find((p) => p.sizeCategory === size && p.packType === currentPackType) ||
+      config.packOptions.find((p) => p.sizeCategory === size) ||
+      config.packOptions[0];
+    if (matchingPack) {
+      handleSelectPack(matchingPack);
+    }
+  };
+
+  // Filtered packs for active size tab
+  const displayedPacks = config.packOptions.filter((p) => {
+    if (p.sizeCategory) return p.sizeCategory === activeSizeFilter;
+    if (activeSizeFilter === '25g') return p.size.includes('25');
+    if (activeSizeFilter === '15g') return p.size.includes('15');
+    return true;
+  });
+
+  // Generate preview of exact WhatsApp message that will be sent
+  const sampleMessage = generateOrderMessage({
+    productName: config.productName || 'DAAD FREE Ayurvedic Antifungal Cream',
+    size: selectedPack.size || '25g',
+    pack: selectedPack.packLabel || selectedPack.name || 'Single',
+    quantity: quantity,
+    unitPrice: unitPrice,
+    totalAmount: totalPrice,
+    currencySymbol: config.currencySymbol || '₹',
+  });
 
   return (
     <section id="home" className="relative pt-6 pb-16 md:pt-12 md:pb-24 overflow-hidden">
@@ -194,7 +252,7 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
             
             <p className="text-[11px] text-[#6E8074] mt-1 text-center">
-              Click any thumbnail to switch &bull; Full resolution product photographs
+              Click thumbnail to inspect 25g &bull; 15g &bull; Pack of 2 &bull; Pack of 4 &bull; Verified Label
             </p>
           </div>
 
@@ -230,7 +288,7 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-[#2D4033] py-2">
               <div className="p-2.5 rounded-xl bg-white border border-[#E7E0D2] text-center">
                 <span className="block font-bold text-sm text-[#18532F]">49%</span>
-                <span className="text-[10px] text-[#55695C]">Alba Bark (कुटज)</span>
+                <span className="text-[10px] text-[#55695C]">Alba Bark (श्वेत कुटज)</span>
               </div>
               <div className="p-2.5 rounded-xl bg-white border border-[#E7E0D2] text-center">
                 <span className="block font-bold text-sm text-[#18532F]">3%</span>
@@ -246,56 +304,103 @@ export const Hero: React.FC<HeroProps> = ({
               </div>
             </div>
 
-            {/* Pack Size / Variant Selector */}
-            <div className="space-y-2">
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#14291B]">
-                Choose Pack Size / Quantity:
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                {config.packOptions.map((pack) => {
-                  const isSelected = selectedPack.id === pack.id;
-                  return (
-                    <button
-                      key={pack.id}
-                      type="button"
-                      onClick={() => handleSelectPack(pack)}
-                      className={`relative p-3.5 rounded-2xl border-2 text-left transition-all flex flex-col justify-between ${
-                        isSelected
-                          ? 'border-[#235E37] bg-[#F3F9F5] shadow-sm ring-1 ring-[#235E37]'
-                          : 'border-[#E2DDD0] bg-white hover:border-[#B7CBBF]'
-                      }`}
-                    >
-                      {pack.badge && (
-                        <span className="absolute -top-2.5 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#1C8A4E] text-white shadow-xs">
-                          {pack.badge}
-                        </span>
-                      )}
-                      <div>
-                        <div className="text-xs font-bold text-[#14291B]">{pack.name}</div>
-                        <div className="text-[11px] text-[#5A6E61]">{pack.size}</div>
-                      </div>
-                      <div className="mt-2 flex items-baseline gap-2">
-                        <span className="text-base font-extrabold text-[#112418]">
-                          {config.currencySymbol}{pack.price}
-                        </span>
-                        {pack.mrp > pack.price && (
-                          <span className="text-xs text-[#829688] line-through">
-                            {config.currencySymbol}{pack.mrp}
+            {/* Size & Pack Selection Section */}
+            <div className="space-y-3 bg-white p-4 sm:p-5 rounded-2xl border border-[#E5DFD1] shadow-xs">
+              
+              {/* Step 1: Select Size (25g or 15g) */}
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#14291B]">
+                  1. Select Product Size:
+                </span>
+                <div className="flex items-center gap-1.5 p-1 bg-[#F2EDE2] rounded-xl border border-[#E0D7C4]">
+                  <button
+                    type="button"
+                    onClick={() => handleFilterSize('25g')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      activeSizeFilter === '25g'
+                        ? 'bg-[#1C8A4E] text-white shadow-xs'
+                        : 'text-[#475C4E] hover:text-[#112418]'
+                    }`}
+                  >
+                    25 gm (Standard)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleFilterSize('15g')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      activeSizeFilter === '15g'
+                        ? 'bg-[#1C8A4E] text-white shadow-xs'
+                        : 'text-[#475C4E] hover:text-[#112418]'
+                    }`}
+                  >
+                    15 gm (Compact)
+                  </button>
+                </div>
+              </div>
+
+              {/* Step 2: Select Pack (Single, Pack of 2, Pack of 4) */}
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[#14291B] block mb-2">
+                  2. Choose Pack Option:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {displayedPacks.map((pack) => {
+                    const isSelected = selectedPack.id === pack.id;
+                    const savings = pack.mrp > pack.price ? pack.mrp - pack.price : 0;
+
+                    return (
+                      <div
+                        key={pack.id}
+                        onClick={() => handleSelectPack(pack)}
+                        className={`relative p-3 rounded-xl border-2 text-left cursor-pointer transition-all flex flex-col justify-between ${
+                          isSelected
+                            ? 'border-[#1C8A4E] bg-[#F1F9F4] shadow-xs ring-1 ring-[#1C8A4E]'
+                            : 'border-[#E2DDD0] bg-white hover:border-[#ADC4B4]'
+                        }`}
+                      >
+                        {pack.badge && (
+                          <span className="absolute -top-2.5 right-2 text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#1C8A4E] text-white shadow-xs">
+                            {pack.badge}
                           </span>
                         )}
+
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 ${
+                              isSelected ? 'border-[#1C8A4E] bg-[#1C8A4E]' : 'border-[#A7BAAE]'
+                            }`}>
+                              {isSelected && <span className="w-1.5 h-1.5 bg-white rounded-full" />}
+                            </span>
+                            <span className="text-xs font-bold text-[#14291B]">{pack.packLabel || pack.name}</span>
+                          </div>
+                          <span className="text-[11px] text-[#55695C] block mt-0.5 ml-5">
+                            {pack.size}
+                          </span>
+                        </div>
+
+                        <div className="mt-2.5 pt-2 border-t border-[#EAE3D5] flex items-baseline justify-between">
+                          <span className="text-sm font-extrabold text-[#112418]">
+                            {config.currencySymbol}{pack.price}
+                          </span>
+                          {savings > 0 && (
+                            <span className="text-[10px] font-semibold text-[#1B6C39] bg-[#E1F3E7] px-1.5 py-0.5 rounded">
+                              Save {config.currencySymbol}{savings}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </button>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
-            {/* Pricing Summary Box */}
+            {/* Pricing Summary & Quantity Selector */}
             <div className="bg-[#FAF5ED] p-4 sm:p-5 rounded-2xl border border-[#E7DECD] shadow-xs">
               <div className="flex items-baseline justify-between flex-wrap gap-2">
                 <div>
                   <span className="text-xs uppercase tracking-wider text-[#63756A] font-semibold block">
-                    Selected: {selectedPack.name} ({selectedPack.size})
+                    Selected: {config.productName} ({selectedPack.size} • {selectedPack.packLabel || selectedPack.name})
                   </span>
                   {unitPrice ? (
                     <div className="flex items-baseline gap-3 mt-1">
@@ -325,7 +430,7 @@ export const Hero: React.FC<HeroProps> = ({
                 {/* Subtotal calculation */}
                 {unitPrice && quantity > 1 && (
                   <div className="text-right">
-                    <span className="text-xs text-[#63756A]">Order Total ({quantity} sets)</span>
+                    <span className="text-xs text-[#63756A]">Total Amount ({quantity} sets)</span>
                     <div className="text-xl font-bold text-[#176633]">
                       {config.currencySymbol}{totalPrice}
                     </div>
@@ -343,7 +448,7 @@ export const Hero: React.FC<HeroProps> = ({
                     <button
                       type="button"
                       onClick={handleDecrease}
-                      className="w-10 h-10 flex items-center justify-center text-[#235E37] hover:bg-[#F2ECE1] transition-colors font-bold text-lg select-none"
+                      className="w-10 h-10 flex items-center justify-center text-[#235E37] hover:bg-[#F2ECE1] transition-colors font-bold text-lg select-none cursor-pointer"
                       aria-label="Decrease quantity"
                     >
                       &minus;
@@ -362,7 +467,7 @@ export const Hero: React.FC<HeroProps> = ({
                     <button
                       type="button"
                       onClick={handleIncrease}
-                      className="w-10 h-10 flex items-center justify-center text-[#235E37] hover:bg-[#F2ECE1] transition-colors font-bold text-lg select-none"
+                      className="w-10 h-10 flex items-center justify-center text-[#235E37] hover:bg-[#F2ECE1] transition-colors font-bold text-lg select-none cursor-pointer"
                       aria-label="Increase quantity"
                     >
                       +
@@ -372,7 +477,7 @@ export const Hero: React.FC<HeroProps> = ({
 
                 <div className="text-xs text-[#5C6E62] flex items-center gap-1.5 font-medium">
                   <Truck className="w-4 h-4 text-[#235E37]" />
-                  <span>Dispatched in 24–48 hours from Indore / Dewas</span>
+                  <span>Pan-India express delivery &bull; Dispatched in 24–48h</span>
                 </div>
               </div>
             </div>
@@ -380,22 +485,56 @@ export const Hero: React.FC<HeroProps> = ({
             {/* CTAs */}
             <div className="space-y-3">
               <button
-                onClick={onOrderWhatsApp}
-                className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl bg-[#1C8A4E] hover:bg-[#167440] active:scale-[0.99] text-white font-bold text-base shadow-md hover:shadow-lg transition-all"
+                onClick={() => onOrderWhatsApp(selectedPack, quantity)}
+                className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl bg-[#1C8A4E] hover:bg-[#167440] active:scale-[0.99] text-white font-bold text-base shadow-md hover:shadow-lg transition-all cursor-pointer"
+                title={`Order ${selectedPack.size} ${selectedPack.packLabel || selectedPack.name} on WhatsApp`}
               >
-                <MessageSquare className="w-5 h-5 fill-white" />
-                <span>Buy Now on WhatsApp ({selectedPack.name})</span>
+                <MessageSquare className="w-5 h-5 fill-white shrink-0" />
+                <span>
+                  Order on WhatsApp &bull; {selectedPack.size} {selectedPack.packLabel || selectedPack.name} {totalPrice ? `(${config.currencySymbol}${totalPrice})` : ''}
+                </span>
                 <ChevronRight className="w-4 h-4 ml-1 opacity-80" />
               </button>
+
+              {/* Message preview toggle */}
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => setShowMessagePreview(!showMessagePreview)}
+                  className="inline-flex items-center gap-1.5 text-xs text-[#486351] hover:text-[#112418] font-medium underline underline-offset-2"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>{showMessagePreview ? 'Hide' : 'View'} prefilled WhatsApp order message</span>
+                </button>
+              </div>
+
+              {/* Prefilled message preview card */}
+              {showMessagePreview && (
+                <div className="p-3.5 bg-[#FAF7F0] border border-[#DDD3C0] rounded-xl text-xs text-[#2D3E32] space-y-2">
+                  <div className="flex items-center justify-between font-bold text-[#112418]">
+                    <span className="flex items-center gap-1.5">
+                      <Info className="w-3.5 h-3.5 text-[#1C8A4E]" />
+                      Prefilled Message Preview for WhatsApp:
+                    </span>
+                    <span className="text-[10px] text-[#647C6C] font-normal">Sent to +91 9131138853</span>
+                  </div>
+                  <pre className="bg-white p-3 rounded-lg border border-[#E5DECD] text-[11px] leading-relaxed text-[#213527] font-mono whitespace-pre-wrap overflow-x-auto">
+                    {sampleMessage}
+                  </pre>
+                  <p className="text-[10px] text-[#6B8072]">
+                    Clicking &ldquo;Order on WhatsApp&rdquo; opens this exact message in your WhatsApp app on phone or desktop.
+                  </p>
+                </div>
+              )}
 
               <div className="flex items-center justify-between text-xs text-[#55695C] px-1">
                 <span className="flex items-center gap-1">
                   <CheckCircle className="w-3.5 h-3.5 text-[#1C8A4E]" />
-                  No online payment gateway needed
+                  No payment gateway needed
                 </span>
                 <span className="flex items-center gap-1">
                   <CheckCircle className="w-3.5 h-3.5 text-[#1C8A4E]" />
-                  Verified directly with KOSTAK Healthcare
+                  Direct WhatsApp verification
                 </span>
               </div>
 

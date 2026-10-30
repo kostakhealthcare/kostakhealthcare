@@ -3,6 +3,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {
+  WHATSAPP_BUSINESS,
+  generateWhatsAppOrderUrl,
+  generateOrderMessage,
+  formatSizeDisplay,
+  formatPackDisplay,
+  OrderMessageParams,
+} from './whatsapp-config';
+
+export {
+  WHATSAPP_BUSINESS,
+  generateWhatsAppOrderUrl,
+  generateOrderMessage,
+  formatSizeDisplay,
+  formatPackDisplay,
+};
+export type { OrderMessageParams };
+
 export interface ProductImageConfig {
   url: string;
   googleDriveId?: string;
@@ -13,7 +31,10 @@ export interface ProductImageConfig {
 export interface ProductPackOption {
   id: string;
   name: string;
-  size: string;
+  size: string; // '25g' or '15g'
+  sizeCategory?: '15g' | '25g';
+  packType?: 'single' | 'pack2' | 'pack4';
+  packLabel?: string; // 'Single', 'Pack of 2', 'Pack of 4'
   quantityInPack: number;
   price: number;
   mrp: number;
@@ -174,7 +195,10 @@ export const DEFAULT_CONFIG: SiteConfig = {
     {
       id: "25gm-single",
       name: "Single Jar (Standard)",
-      size: "25 gm",
+      size: "25g",
+      sizeCategory: "25g",
+      packType: "single",
+      packLabel: "Single",
       quantityInPack: 1,
       price: 349,
       mrp: 380,
@@ -184,7 +208,10 @@ export const DEFAULT_CONFIG: SiteConfig = {
     {
       id: "25gm-pack2",
       name: "Pack of 2 Jars",
-      size: "25 gm x 2 (50 gm)",
+      size: "25g",
+      sizeCategory: "25g",
+      packType: "pack2",
+      packLabel: "Pack of 2",
       quantityInPack: 2,
       price: 649,
       mrp: 760,
@@ -193,8 +220,11 @@ export const DEFAULT_CONFIG: SiteConfig = {
     },
     {
       id: "25gm-pack4",
-      name: "Pack of 4 Jars",
-      size: "25 gm x 4 (100 gm)",
+      name: "Pack of 4 Jars (Family Saver)",
+      size: "25g",
+      sizeCategory: "25g",
+      packType: "pack4",
+      packLabel: "Pack of 4",
       quantityInPack: 4,
       price: 1199,
       mrp: 1520,
@@ -203,13 +233,42 @@ export const DEFAULT_CONFIG: SiteConfig = {
     },
     {
       id: "15gm-single",
-      name: "Compact Jar",
-      size: "15 gm",
+      name: "Compact Jar (Travel Friendly)",
+      size: "15g",
+      sizeCategory: "15g",
+      packType: "single",
+      packLabel: "Single",
       quantityInPack: 1,
       price: 249,
       mrp: 280,
       imageUrl: "/assets/aistudio/15gm_Master_Product.jpg_d47597ac.jpeg",
       badge: "Travel Size",
+    },
+    {
+      id: "15gm-pack2",
+      name: "Pack of 2 Jars (15g x 2)",
+      size: "15g",
+      sizeCategory: "15g",
+      packType: "pack2",
+      packLabel: "Pack of 2",
+      quantityInPack: 2,
+      price: 469,
+      mrp: 560,
+      imageUrl: "/assets/aistudio/15gm_pack_of_2.jpg_63c7cb40.jpeg",
+      badge: "Save ₹91",
+    },
+    {
+      id: "15gm-pack4",
+      name: "Pack of 4 Jars (15g x 4)",
+      size: "15g",
+      sizeCategory: "15g",
+      packType: "pack4",
+      packLabel: "Pack of 4",
+      quantityInPack: 4,
+      price: 879,
+      mrp: 1120,
+      imageUrl: "/assets/aistudio/15gm_pack_of_4.jpg_a444cbd3.jpeg",
+      badge: "Economy Saver",
     },
   ],
   reviews: [],

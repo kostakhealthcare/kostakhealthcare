@@ -246,7 +246,7 @@ window.DAAD_FREE_CONFIG = ${JSON.stringify(localConfig, null, 2)};
                     WhatsApp Business Phone Number *
                   </label>
                   <p className="text-[11px] text-[#55695C] mb-2">
-                    Country code + digits only (e.g. <code>919876543210</code> for India). No spaces, dashes, or &apos;+&apos;.
+                    Country code + digits only (e.g. <code>919131138853</code> for India). No spaces, dashes, or &apos;+&apos;.
                   </p>
                   <input
                     type="text"
@@ -254,7 +254,7 @@ window.DAAD_FREE_CONFIG = ${JSON.stringify(localConfig, null, 2)};
                     onChange={(e) =>
                       setLocalConfig({ ...localConfig, whatsAppNumber: e.target.value.replace(/[^\d]/g, '') })
                     }
-                    placeholder="919876543210"
+                    placeholder="919131138853"
                     className="w-full max-w-md px-3.5 py-2.5 rounded-xl border border-[#D5CDC0] text-sm font-mono focus:ring-2 focus:ring-[#235E37]"
                   />
                 </div>
@@ -262,7 +262,7 @@ window.DAAD_FREE_CONFIG = ${JSON.stringify(localConfig, null, 2)};
                 <div className="text-[11px] text-[#4E6254] bg-white p-3 rounded-xl border border-[#ECE5D8]">
                   <strong>Current link format:</strong>{' '}
                   <code className="text-[#194E2C]">
-                    https://wa.me/{localConfig.whatsAppNumber || '91XXXXXXXXXX'}?text=...
+                    https://wa.me/{localConfig.whatsAppNumber || '919131138853'}?text=...
                   </code>
                 </div>
               </div>
