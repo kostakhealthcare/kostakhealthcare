@@ -14,8 +14,9 @@ import {
 } from './config';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
-import { ProductInformation } from './components/ProductInformation';
 import { ProductBenefits } from './components/ProductBenefits';
+import { UsageDirections } from './components/UsageDirections';
+import { ProductInformation } from './components/ProductInformation';
 import { CustomerReviews } from './components/CustomerReviews';
 import { FaqSection } from './components/FaqSection';
 import { ContactAndShipping } from './components/ContactAndShipping';
@@ -28,13 +29,13 @@ export default function App() {
   const [selectedPack, setSelectedPack] = useState<ProductPackOption>(
     () => config.packOptions?.[0] || {
       id: "25gm-single",
-      name: "Single Jar (Standard)",
-      size: "25 gm",
+      name: "1 जार मानक (25 ग्राम)",
+      size: "25 ग्राम",
       quantityInPack: 1,
       price: 349,
       mrp: 380,
       imageUrl: "/assets/aistudio/25_gm_Master_Product_front.jpg_0667641f.jpeg",
-      badge: "Most Popular",
+      badge: "सर्वाधिक लोकप्रिय",
     }
   );
   const [quantity, setQuantity] = useState<number>(1);
@@ -61,24 +62,24 @@ export default function App() {
   };
 
   /**
-   * Generates and triggers the official WhatsApp click-to-chat order URL
-   * Opens WhatsApp with prefilled message format required by store:
-   * Hello DAAD FREE Team,
-   * I want to place an order.
-   * Product: [Product Name]
-   * Size: [Size]
-   * Pack: [Pack]
-   * Quantity: [Quantity]
-   * Total Amount: [Amount]
-   * Please confirm my order and delivery details.
+   * Generates and triggers the official Hindi WhatsApp order message:
+   * नमस्ते DAAD FREE टीम,
+   * मैं ऑर्डर देना चाहता/चाहती हूँ:
+   * 
+   * उत्पाद: [Product Name]
+   * साइज़: [Size]
+   * पैक: [Pack]
+   * मात्रा: [Quantity]
+   * कुल राशि: [Amount]
+   * 
+   * कृपया मेरे ऑर्डर और डिलीवरी विवरण की पुष्टि करें। धन्यवाद!
    */
   const handleOrderWhatsApp = (customPack?: ProductPackOption, customQty?: number) => {
     const packToOrder = customPack || selectedPack;
     const qty = customQty != null ? customQty : quantity;
-    const cleanNumber = (config.whatsAppNumber || WHATSAPP_BUSINESS.fullNumber || '').replace(/[^\d]/g, '');
+    const cleanNumber = (config.whatsAppNumber || WHATSAPP_BUSINESS.fullNumber || '919131138853').replace(/[^\d]/g, '');
 
-    // Validate phone number
-    if (!cleanNumber || cleanNumber.length < 10 || cleanNumber.includes('XXXX')) {
+    if (!cleanNumber || cleanNumber.length < 10) {
       setMissingPhoneAlert(true);
       return;
     }
@@ -88,8 +89,8 @@ export default function App() {
 
     const whatsappUrl = generateWhatsAppOrderUrl({
       productName: config.productName || 'DAAD FREE Ayurvedic Antifungal Cream',
-      size: packToOrder?.size || '25g',
-      pack: packToOrder?.packLabel || packToOrder?.name || 'Single',
+      size: packToOrder?.size || '25 ग्राम',
+      pack: packToOrder?.packLabel || packToOrder?.name || '1 जार (मानक)',
       quantity: qty,
       unitPrice,
       totalAmount: totalPrice,
@@ -97,8 +98,6 @@ export default function App() {
       customWhatsAppNumber: cleanNumber,
     });
 
-    // Cross-platform open:
-    // Try window.open first, if blocked or in mobile context fallback to location.href
     try {
       const opened = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
       if (!opened || opened.closed || typeof opened.closed === 'undefined') {
@@ -122,23 +121,24 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1D2A22]">
-      {/* Customer support connection notice if needed */}
+    <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1D2A22] w-full max-w-full overflow-x-hidden">
+      {/* Customer support connection notice in Hindi */}
       {missingPhoneAlert && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-[#E2DDD0]">
-            <h3 className="text-lg font-bold text-[#14291B] font-serif-title">
-              WhatsApp Support
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-[#E3EDE6]">
+            <h3 className="text-base sm:text-lg font-bold text-[#0F281B] font-serif-title">
+              WhatsApp ग्राहक सहायता
             </h3>
-            <p className="text-xs sm:text-sm text-[#4E6255] mt-2 leading-relaxed">
-              To place your order or speak with our Ayurvedic support representative, please reach us directly at WhatsApp / Phone <strong>+91 9131138853</strong> or email <a href="mailto:contact@kostakhealthcare.com" className="text-[#235E37] underline">contact@kostakhealthcare.com</a>.
+            <p className="text-xs sm:text-sm text-[#4E6255] mt-2 leading-relaxed break-words">
+              ऑर्डर करने या हमारे आयुर्वेदिक प्रतिनिधि से सीधे बात करने हेतु कृपया WhatsApp / फोन नंबर <strong>+91 9131138853</strong> पर संपर्क करें अथवा <a href="mailto:kostakhealthcare@gmail.com" className="text-[#1C8A4E] underline break-all">kostakhealthcare@gmail.com</a> पर ईमेल भेजें।
             </p>
             <div className="mt-6 flex justify-end">
               <button
+                type="button"
                 onClick={() => setMissingPhoneAlert(false)}
-                className="py-2.5 px-6 rounded-xl bg-[#235E37] text-white text-xs sm:text-sm font-semibold hover:bg-[#18482A] transition-colors"
+                className="py-2.5 px-6 rounded-xl bg-[#0F281B] text-white text-xs sm:text-sm font-semibold hover:bg-[#143524] transition-colors cursor-pointer"
               >
-                Close
+                बंद करें
               </button>
             </div>
           </div>
@@ -152,9 +152,9 @@ export default function App() {
         onOpenPolicy={handleOpenPolicy}
       />
 
-      {/* Main Content */}
+      {/* Main Content Flow */}
       <main className="flex-grow">
-        {/* Hero Section with genuine packaging showcase and pack selector */}
+        {/* 1. Main Product Hero Section (Leebord Inspired) */}
         <Hero
           config={config}
           quantity={quantity}
@@ -164,22 +164,25 @@ export default function App() {
           onOrderWhatsApp={handleOrderWhatsApp}
         />
 
-        {/* Product Information with verified label ingredients and directions */}
-        <ProductInformation config={config} />
-
-        {/* Product Benefits with official infographics */}
+        {/* 2. Product Benefits */}
         <ProductBenefits config={config} />
 
-        {/* Customer Reviews (starts empty until approved) */}
+        {/* 3. Directions and Usage Instructions ("उपयोग करने का सही तरीका" with 6 responsive cards) */}
+        <UsageDirections config={config} />
+
+        {/* 4. Important Information Section ("महत्वपूर्ण जानकारी" covering details, sizes, manufacturer, precautions, support) */}
+        <ProductInformation config={config} />
+
+        {/* 5. Customer Reviews (strictly hides when no approved reviews exist, compliant with Section 8) */}
         <CustomerReviews
           config={config}
           onReviewSubmitted={handleReviewSubmitted}
         />
 
-        {/* FAQ Section */}
+        {/* 6. FAQ Section (Accordion covering all 6 topics in Hindi) */}
         <FaqSection config={config} />
 
-        {/* Contact and Shipping with genuine addresses */}
+        {/* 7. Contact and Shipping */}
         <ContactAndShipping
           config={config}
           onOrderWhatsApp={handleOrderWhatsApp}

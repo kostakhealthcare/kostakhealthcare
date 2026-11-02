@@ -11,84 +11,101 @@ interface FaqSectionProps {
   config: SiteConfig;
 }
 
-export const FaqSection: React.FC<FaqSectionProps> = ({ config }) => {
+export const FaqSection: React.FC<FaqSectionProps> = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs = [
     {
-      q: 'How does ordering on WhatsApp work without an online payment gateway?',
-      a: `Ordering is direct, simple, and personal! When you click "Buy Now on WhatsApp", it opens your official WhatsApp app with a pre-filled message detailing the product (DAAD FREE 25g), your selected quantity, and pricing. You simply send the message to KOSTAK Healthcare. Our team will verify immediate stock, calculate shipping or delivery terms for your pincode, and share direct payment instructions (such as UPI/Bank transfer or COD options if available). You never enter bank credentials on this website.`,
+      topic: 'उत्पाद की जानकारी',
+      q: 'DAAD FREE क्या है और यह किन समस्याओं में असरदार है?',
+      a: `DAAD FREE (दाद का दिव्यास्त्र) एक विशेष आयुर्वेदिक एंटीफंगल क्रीम है जो दाद (रिंगवर्म), खाज, जिद्दी फंगल संक्रमण और असहनीय खुजली से पहले ही दिन से असरदार राहत प्रदान करने के लिए तैयार की गई है। यह त्वचा की जलन व खुजली को शांत कर संक्रमण के फैलाव को रोकती है।`,
     },
     {
-      q: 'What is the pack size and form of DAAD FREE?',
-      a: `DAAD FREE comes in a 25 gm net weight tube with an outer protective carton box. It is a smooth, topical Ayurvedic cream intended for localized skin application.`,
+      topic: 'उपलब्ध पैक',
+      q: 'DAAD FREE के कौन से साइज़ और पैक विकल्प उपलब्ध हैं?',
+      a: `DAAD FREE दो साइज़ में उपलब्ध है: 25 ग्राम (मानक जार) और 15 ग्राम (कॉम्पैक्ट जार)। आप अपनी आवश्यकतानुसार 1 जार (मानक), 2 जार का बचत पैक, या 4 जार का पारिवारिक कॉम्बो पैक ऑर्डर कर सकते हैं। मल्टी-पैक विकल्पों पर विशेष छूट और बचत मिलती है।`,
     },
     {
-      q: 'How should I apply DAAD FREE cream?',
-      a: `First, cleanse the affected area gently with warm water and pat completely dry with a clean towel. Gently spread a thin layer of DAAD FREE cream over the affected skin and slightly past the margins. Apply 2 times daily (typically morning and night) or as directed by an Ayurvedic practitioner. Wash hands after use.`,
+      topic: 'ऑर्डर कैसे करें',
+      q: 'बिना पेमेंट गेटवे के वेबसाइट से WhatsApp पर ऑर्डर कैसे होता है?',
+      a: `ऑर्डर करने की प्रक्रिया अत्यंत सीधी और सुरक्षित है! जब आप वेबसाइट पर "WhatsApp पर ऑर्डर करें" बटन दबाते हैं, तो आपके मोबाइल या कंप्यूटर में WhatsApp एक तैयार संदेश (उत्पाद का नाम, चयनित साइज़, पैक, मात्रा और कुल राशि) के साथ खुल जाता है। आप बस वह संदेश KOSTAK Healthcare टीम को भेजते हैं। हमारी टीम तुरंत स्टॉक और डिलीवरी विवरण की पुष्टि करती है। वेबसाइट पर कोई कार्ड या पासवर्ड डालने की आवश्यकता नहीं है।`,
     },
     {
-      q: 'Is DAAD FREE suitable for all types of skin rashes?',
-      a: `No. DAAD FREE is formulated specifically for topical relief from fungal-related skin irritations, ringworm (daad), and localized fungal itching. It is not formulated to treat bacterial ulcers, viral blisters, allergies, or non-fungal conditions. If your condition does not improve or causes discomfort, stop use and consult a healthcare professional.`,
+      topic: 'डिलीवरी एवं डिस्पैच',
+      q: 'ऑर्डर की डिलीवरी में कितना समय लगता है और ट्रैकिंग कैसे मिलती है?',
+      a: `WhatsApp पर ऑर्डर कन्फर्म होने के 24 से 48 घंटे के भीतर पार्सल सुरक्षित सीलबंद पैक कर एक्सप्रेस कूरियर से रवाना किया जाता है। पूरे भारत में 3 से 7 कार्य दिवसों में डिलीवरी हो जाती है। पार्सल रवाना होते ही रियल-टाइम ट्रैकिंग नंबर और कूरियर लिंक सीधे आपके WhatsApp चैट पर भेज दिया जाता है।`,
     },
     {
-      q: 'What if the price shows "Contact us for price"?',
-      a: `If a specific promotional or wholesale price is not listed, our representative will immediately provide current batch pricing, multi-pack discounts, and delivery estimates when you connect with us on WhatsApp.`,
+      topic: 'भुगतान विकल्प',
+      q: 'ऑर्डर के लिए भुगतान (Payment) कैसे करना होता है?',
+      a: `WhatsApp पर ऑर्डर विवरण और आपके पिनकोड की जांच के बाद, हमारी टीम आपको सीधे सुरक्षित भुगतान विकल्प (UPI जैसे Google Pay, PhonePe, Paytm अथवा बैंक ट्रांसफर) साझा करती है। आप सुविधा अनुसार सीधे भुगतान कर सकते हैं।`,
     },
     {
-      q: 'How long does delivery take?',
-      a: `Orders confirmed via WhatsApp are typically dispatched within 24 to 48 business hours. Depending on your Indian delivery pin code, delivery takes between 3 to 7 business days via reliable courier partners. Tracking details are sent to you directly on WhatsApp.`,
-    },
-    {
-      q: 'Can I cancel or return my order?',
-      a: `You may cancel your order at any time before dispatch by messaging our team on WhatsApp. Due to pharmaceutical hygiene and safety standards for personal skincare products, opened or used cream tubes cannot be returned. Please refer to our full Return & Refund Policy in the footer.`,
+      topic: 'इस्तेमाल और सावधानियाँ',
+      q: 'क्रीम लगाने का सही तरीका क्या है और 7 दिनों का विशेष नियम क्या है?',
+      a: `प्रभावित त्वचा को हल्के गुनगुने पानी से साफ कर सुखा लें और दिन में 2 बार (सुबह व रात) क्रीम की एक पतली परत लगाएं। लगाने के बाद हाथों को साबुन से धो लें। महत्वपूर्ण सावधानी: यदि आप पहले से कोई अन्य एलोपैथिक या रासायनिक एंटीफंगल क्रीम इस्तेमाल कर रहे हैं, तो उसे बंद करके कम से कम 07 दिन बाद ही DAAD FREE लगाना शुरू करें ताकि त्वचा पर कोई विपरीत प्रभाव न पड़े।`,
     },
   ];
 
   return (
-    <section id="faq" className="py-16 md:py-24 bg-[#FAF7F0] border-t border-[#E8E1D2]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="faq" className="py-12 sm:py-16 md:py-20 bg-[#FAF8F5] border-t border-[#E3EDE6] w-full max-w-full overflow-hidden">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#235E37]">
-            Got Questions?
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#1C8A4E]">
+            अक्सर पूछे जाने वाले सवाल
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#112418] mt-2 font-serif-title">
-            Frequently Asked Questions
+          <h2 className="font-clamp-title font-bold text-[#0F281B] mt-2 font-serif-title break-words">
+            सवाल और जवाब (FAQ)
           </h2>
-          <p className="mt-2 text-sm text-[#4E6255]">
-            Everything you need to know about DAAD FREE and WhatsApp ordering.
+          <p className="mt-2 text-sm sm:text-base text-[#4E6255] break-words">
+            उत्पाद, साइज़, ऑर्डर प्रक्रिया, डिलीवरी और उपयोग विधि से जुड़े सभी महत्वपूर्ण प्रश्न
           </p>
         </div>
 
+        {/* Accordion List */}
         <div className="space-y-3">
           {faqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
               <div
                 key={idx}
-                className="bg-white rounded-2xl border border-[#EBE3D5] overflow-hidden transition-all shadow-xs"
+                className="bg-white rounded-2xl border border-[#E3EDE6] overflow-hidden transition-all shadow-xs"
               >
                 <button
+                  type="button"
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
-                  className="w-full py-4 px-5 text-left flex items-center justify-between gap-4 hover:bg-[#FDFBF7] transition-colors"
+                  className="w-full py-4 px-4 sm:px-6 text-left flex items-start justify-between gap-3 hover:bg-[#F2F7F4]/50 transition-colors cursor-pointer"
+                  aria-expanded={isOpen}
                 >
-                  <span className="text-sm sm:text-base font-semibold text-[#14291B]">
-                    {faq.q}
-                  </span>
-                  <div className="w-7 h-7 rounded-full bg-[#F4EFE5] text-[#235E37] flex items-center justify-center shrink-0">
+                  <div className="min-w-0 pr-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#1C8A4E] block mb-0.5">
+                      {faq.topic}
+                    </span>
+                    <span className="text-sm sm:text-base font-bold text-[#0F281B] break-words">
+                      {faq.q}
+                    </span>
+                  </div>
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#F2F7F4] text-[#0F281B] flex items-center justify-center shrink-0 mt-0.5">
                     {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </div>
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-[#44584B] leading-relaxed border-t border-[#F2ECE0]">
+                  <div className="px-4 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-[#38483D] leading-relaxed border-t border-[#EAE3D4] bg-[#FAF8F5]/40 break-words">
                     {faq.a}
                   </div>
                 )}
               </div>
             );
           })}
+        </div>
+
+        {/* Support Note */}
+        <div className="mt-8 text-center text-xs text-[#55695C] flex items-center justify-center gap-1.5">
+          <HelpCircle className="w-4 h-4 text-[#1C8A4E] shrink-0" />
+          <span>कोई अन्य सवाल है? सीधे WhatsApp (+91 9131138853) पर हमारे प्रतिनिधि से पूछें।</span>
         </div>
 
       </div>

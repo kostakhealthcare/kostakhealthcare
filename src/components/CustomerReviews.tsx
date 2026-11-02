@@ -8,20 +8,21 @@ import {
   Star,
   MessageSquarePlus,
   CheckCircle2,
-  Calendar,
-  MapPin,
   X,
   Send,
-  ShieldCheck,
+  MapPin,
 } from 'lucide-react';
 import { CustomerReview, SiteConfig } from '../config';
 
 interface CustomerReviewsProps {
   config: SiteConfig;
-  onReviewSubmitted: (newReview: CustomerReview) => void;
+  onReviewSubmitted: (review: CustomerReview) => void;
 }
 
-export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ config, onReviewSubmitted }) => {
+export const CustomerReviews: React.FC<CustomerReviewsProps> = ({
+  config,
+  onReviewSubmitted,
+}) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
@@ -30,8 +31,13 @@ export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ config, onRevi
   const [photoUrl, setPhotoUrl] = useState('');
   const [submittedMessage, setSubmittedMessage] = useState(false);
 
-  // Filter ONLY approved reviews as mandated
+  // Filter ONLY genuine approved reviews as strictly mandated
   const approvedReviews = (config.reviews || []).filter((r) => r.approved === true);
+
+  // MANDATE: "If genuine reviews are unavailable, hide the reviews section."
+  if (approvedReviews.length === 0) {
+    return null;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +51,7 @@ export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ config, onRevi
       date: new Date().toISOString().split('T')[0],
       reviewText: reviewText.trim(),
       photoUrl: photoUrl.trim() || undefined,
-      approved: false, // Submitted reviews require verification before public display
+      approved: false,
     };
 
     onReviewSubmitted(newReview);
@@ -63,185 +69,163 @@ export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ config, onRevi
   };
 
   return (
-    <section id="reviews" className="py-16 md:py-24 bg-[#FAF8F5] border-t border-[#E8E1D2]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="reviews" className="py-12 sm:py-16 md:py-20 bg-[#FAF8F5] border-t border-[#E3EDE6] w-full max-w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#235E37]">
-              Customer Feedback
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-4 sm:gap-6">
+          <div className="min-w-0">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#1C8A4E]">
+              सत्यापित अनुभव
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#112418] mt-2 font-serif-title">
-              Verified Customer Reviews
+            <h2 className="font-clamp-title font-bold text-[#0F281B] mt-2 font-serif-title break-words">
+              सत्यापित ग्राहकों की वास्तविक समीक्षाएं
             </h2>
-            <p className="mt-2 text-sm text-[#4A5D50]">
-              Authentic experiences only. We never publish fake testimonials or automated ratings.
+            <p className="mt-2 text-xs sm:text-sm text-[#4E6255] break-words">
+              केवल वास्तविक और अनुमति प्राप्त ग्राहकों के अनुभव।
             </p>
           </div>
 
           <button
+            type="button"
             onClick={() => setModalOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white border border-[#235E37] text-[#235E37] hover:bg-[#235E37] hover:text-white transition-all text-xs sm:text-sm font-semibold shadow-xs self-start md:self-auto"
+            className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-white border border-[#0F281B] text-[#0F281B] hover:bg-[#0F281B] hover:text-white active:scale-95 transition-all text-xs sm:text-sm font-semibold shadow-xs cursor-pointer shrink-0"
           >
             <MessageSquarePlus className="w-4 h-4" />
-            <span>Write a Review</span>
+            <span>समीक्षा लिखें</span>
           </button>
         </div>
 
-        {/* Reviews List or Honest Empty State */}
-        {approvedReviews.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {approvedReviews.map((rev) => (
-              <div
-                key={rev.id}
-                className="bg-white p-6 rounded-2xl border border-[#EBE3D5] shadow-xs flex flex-col justify-between"
-              >
-                <div>
-                  {/* Star Rating */}
-                  <div className="flex items-center gap-1 mb-3">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`w-4 h-4 ${
-                          star <= rev.rating
-                            ? 'text-[#E5A823] fill-[#E5A823]'
-                            : 'text-[#D9D3C7]'
-                        }`}
-                      />
-                    ))}
+        {/* Approved Reviews Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          {approvedReviews.map((rev) => (
+            <div
+              key={rev.id}
+              className="bg-white p-5 sm:p-6 rounded-3xl border border-[#E3EDE6] shadow-xs flex flex-col justify-between"
+            >
+              <div>
+                {/* Star Rating */}
+                <div className="flex items-center gap-1 mb-3">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`w-4 h-4 ${
+                        star <= rev.rating
+                          ? 'text-[#E5A823] fill-[#E5A823]'
+                          : 'text-[#D9D3C7]'
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                {/* Review Text */}
+                <p className="text-xs sm:text-sm text-[#38483D] leading-relaxed italic mb-4 break-words">
+                  &ldquo;{rev.reviewText}&rdquo;
+                </p>
+
+                {/* Optional Review Photo */}
+                {rev.photoUrl && (
+                  <div className="mb-4 rounded-xl overflow-hidden max-h-48 border border-[#E3EDE6]">
+                    <img
+                      src={rev.photoUrl}
+                      alt="ग्राहक समीक्षा फोटो"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
                   </div>
+                )}
+              </div>
 
-                  {/* Review Text */}
-                  <p className="text-xs sm:text-sm text-[#384A3E] leading-relaxed italic mb-4">
-                    &ldquo;{rev.reviewText}&rdquo;
-                  </p>
-
-                  {/* Optional Review Photo */}
-                  {rev.photoUrl && (
-                    <div className="mb-4 rounded-xl overflow-hidden max-h-48 border border-[#E9E2D2]">
-                      <img
-                        src={rev.photoUrl}
-                        alt="Customer review attachment"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+              {/* Customer Meta */}
+              <div className="pt-3.5 sm:pt-4 border-t border-[#EAE3D4] flex items-center justify-between text-xs text-[#55695C] gap-2">
+                <div className="min-w-0">
+                  <span className="font-bold text-[#0F281B] block truncate">
+                    {rev.customerName}
+                  </span>
+                  {rev.city && (
+                    <span className="text-[11px] text-[#63776A] flex items-center gap-1 truncate">
+                      <MapPin className="w-3 h-3 shrink-0" />
+                      <span className="truncate">{rev.city}</span>
+                    </span>
                   )}
                 </div>
-
-                {/* Customer Meta */}
-                <div className="pt-4 border-t border-[#EAE3D3] flex items-center justify-between text-xs text-[#5D7063]">
-                  <div>
-                    <span className="font-bold text-[#14291B] block">
-                      {rev.customerName}
-                    </span>
-                    {rev.city && (
-                      <span className="text-[11px] text-[#718476] flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        {rev.city}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1 text-[11px] text-[#235E37]">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Approved</span>
-                  </div>
+                <div className="flex items-center gap-1 text-[11px] text-[#1C8A4E] shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>सत्यापित ग्राहक</span>
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          /* Empty State Compliant with Master Prompt */
-          <div className="bg-white rounded-3xl p-8 sm:p-12 text-center border border-[#EAE2D4] max-w-2xl mx-auto shadow-xs">
-            <div className="w-14 h-14 rounded-full bg-[#EBF3ED] text-[#235E37] flex items-center justify-center mx-auto mb-4">
-              <ShieldCheck className="w-7 h-7" />
             </div>
-            <h3 className="text-lg font-bold text-[#112418] font-serif-title">
-              No Approved Reviews Yet
-            </h3>
-            <p className="mt-2 text-xs sm:text-sm text-[#506356] leading-relaxed max-w-md mx-auto">
-              In strict adherence to KOSTAK Healthcare&apos;s honesty policy, we do not show manufactured or pre-populated reviews. Only real, approved customer feedback will appear here.
-            </p>
-            <div className="mt-6">
-              <button
-                onClick={() => setModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#235E37] text-white text-xs sm:text-sm font-semibold hover:bg-[#1A4B2B] transition-colors shadow-xs"
-              >
-                <MessageSquarePlus className="w-4 h-4" />
-                <span>Be the First to Review</span>
-              </button>
-            </div>
-          </div>
-        )}
+          ))}
+        </div>
 
       </div>
 
-      {/* =================================================================== */}
-      {/* WRITE A REVIEW MODAL */}
-      {/* =================================================================== */}
+      {/* Review Submission Modal */}
       {modalOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4"
           onClick={() => setModalOpen(false)}
         >
           <div
-            className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-[#E2DDD0]"
+            className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-3xl p-5 sm:p-7 shadow-xl border border-[#E3EDE6]"
             onClick={(e) => e.stopPropagation()}
           >
             <button
+              type="button"
               onClick={() => setModalOpen(false)}
-              className="absolute top-5 right-5 p-2 rounded-full hover:bg-[#F2ECE1] text-[#4A5D50]"
+              className="absolute top-4 right-4 p-2 rounded-full hover:bg-[#F2F7F4] text-[#4E6255] cursor-pointer"
+              aria-label="समीक्षा बॉक्स बंद करें"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-xl font-bold text-[#112418] font-serif-title">
-              Submit Your Honest Feedback
+            <h3 className="text-lg sm:text-xl font-bold text-[#0F281B] font-serif-title pr-8 break-words">
+              अपना वास्तविक अनुभव साझा करें
             </h3>
-            <p className="text-xs text-[#526558] mt-1">
-              Your review will be verified by the KOSTAK Healthcare team before appearing on the site.
+            <p className="text-xs text-[#526558] mt-1 break-words">
+              आपकी समीक्षा KOSTAK Healthcare गुणवत्ता टीम द्वारा सत्यापन के बाद वेबसाइट पर प्रदर्शित होगी।
             </p>
 
             {submittedMessage ? (
-              <div className="mt-6 p-6 rounded-2xl bg-[#EAF5EE] border border-[#B8DEC3] text-center">
-                <CheckCircle2 className="w-8 h-8 text-[#1A6C39] mx-auto mb-2" />
-                <h4 className="text-sm font-bold text-[#112418]">Review Submitted</h4>
-                <p className="text-xs text-[#395041] mt-1">
-                  Thank you for your valuable feedback! It will appear once verified by our quality team.
+              <div className="mt-5 p-5 rounded-2xl bg-[#E8F2EC] border border-[#BED9C6] text-center">
+                <CheckCircle2 className="w-8 h-8 text-[#1C8A4E] mx-auto mb-2" />
+                <h4 className="text-sm font-bold text-[#0F281B]">समीक्षा दर्ज कर ली गई है</h4>
+                <p className="text-xs text-[#3E5245] mt-1">
+                  आपके बहुमूल्य अनुभव के लिए धन्यवाद! सत्यापन के बाद इसे प्रकाशित किया जाएगा।
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              <form onSubmit={handleSubmit} className="mt-5 space-y-3.5 sm:space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-[#1F3325] mb-1">
-                    Your Name / Display Name *
+                  <label className="block text-xs font-semibold text-[#0F281B] mb-1">
+                    आपका नाम *
                   </label>
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Ananya Patel"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#D5CDC0] text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-[#235E37]"
+                    placeholder="उदा. राहुल शर्मा"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBDCD1] text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-[#0F281B]"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-[#1F3325] mb-1">
-                      City / State (Optional)
+                    <label className="block text-xs font-semibold text-[#0F281B] mb-1">
+                      शहर / राज्य (वैकल्पिक)
                     </label>
                     <input
                       type="text"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      placeholder="e.g. Pune, MH"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#D5CDC0] text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-[#235E37]"
+                      placeholder="उदा. इंदौर, म.प्र."
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBDCD1] text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-[#0F281B]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#1F3325] mb-1">
-                      Rating *
+                    <label className="block text-xs font-semibold text-[#0F281B] mb-1">
+                      रेटिंग (स्टार) *
                     </label>
                     <div className="flex items-center gap-1.5 h-10">
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -249,13 +233,14 @@ export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ config, onRevi
                           type="button"
                           key={star}
                           onClick={() => setRating(star)}
-                          className="p-1 hover:scale-110 transition-transform"
+                          className="p-1 hover:scale-110 transition-transform cursor-pointer"
+                          aria-label={`${star} स्टार`}
                         >
                           <Star
                             className={`w-5 h-5 ${
                               star <= rating
                                 ? 'text-[#E5A823] fill-[#E5A823]'
-                                : 'text-[#CDC6B8]'
+                                : 'text-[#CBDCD1]'
                             }`}
                           />
                         </button>
@@ -265,39 +250,39 @@ export const CustomerReviews: React.FC<CustomerReviewsProps> = ({ config, onRevi
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#1F3325] mb-1">
-                    Written Review *
+                  <label className="block text-xs font-semibold text-[#0F281B] mb-1">
+                    आपका अनुभव / समीक्षा विवरण *
                   </label>
                   <textarea
                     required
                     rows={4}
                     value={reviewText}
                     onChange={(e) => setReviewText(e.target.value)}
-                    placeholder="Share your experience using DAAD FREE cream, duration of use, and comfort..."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#D5CDC0] text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-[#235E37]"
+                    placeholder="DAAD FREE क्रीम के इस्तेमाल का अनुभव, कितने दिनों में आराम मिला..."
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#CBDCD1] text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-[#0F281B]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#1F3325] mb-1">
-                    Optional Review Photo Link (Public image URL)
+                  <label className="block text-xs font-semibold text-[#0F281B] mb-1">
+                    समीक्षा फोटो लिंक (वैकल्पिक)
                   </label>
                   <input
                     type="url"
                     value={photoUrl}
                     onChange={(e) => setPhotoUrl(e.target.value)}
                     placeholder="https://..."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#D5CDC0] text-xs focus:outline-hidden focus:ring-2 focus:ring-[#235E37]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#CBDCD1] text-xs focus:outline-hidden focus:ring-2 focus:ring-[#0F281B]"
                   />
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-1">
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#235E37] text-white text-xs sm:text-sm font-semibold hover:bg-[#1A4A2B] transition-colors shadow-xs"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#0F281B] text-white text-xs sm:text-sm font-semibold hover:bg-[#143524] active:scale-[0.99] transition-colors shadow-xs cursor-pointer"
                   >
                     <Send className="w-4 h-4" />
-                    <span>Submit Customer Review</span>
+                    <span>समीक्षा सबमिट करें</span>
                   </button>
                 </div>
               </form>

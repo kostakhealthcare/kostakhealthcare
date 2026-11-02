@@ -17,41 +17,41 @@ export const ContactAndShipping: React.FC<ContactAndShippingProps> = ({
   onOrderWhatsApp,
 }) => {
   return (
-    <section id="contact" className="py-16 md:py-24 bg-white border-t border-[#E8E1D2]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="py-12 sm:py-16 md:py-20 bg-white border-t border-[#E3EDE6] w-full max-w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#235E37]">
-            Direct Customer Support
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#1C8A4E]">
+            सीधी ग्राहक सहायता
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#112418] mt-2 font-serif-title">
-            Connect with {config.companyFullName || config.brandName}
+          <h2 className="font-clamp-title font-bold text-[#0F281B] mt-2 font-serif-title break-words">
+            {config.companyFullName || config.brandName} से संपर्क करें
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-[#4E6255]">
-            We are here to assist with product inquiries, delivery status, and bulk orders across India.
+          <p className="mt-2 text-sm sm:text-base text-[#4E6255] break-words">
+            उत्पाद पूछताछ, डिलीवरी स्थिति और ऑर्डर संबंधी हर सहायता के लिए हमारे आधिकारिक प्रतिनिधि से जुड़ें।
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           
           {/* Contact Details Card */}
-          <div className="lg:col-span-5 bg-[#FAF8F5] p-6 sm:p-8 rounded-3xl border border-[#E9E2D4] space-y-6">
-            <h3 className="text-lg font-bold text-[#112418] font-serif-title">
-              Official Business Contact
+          <div className="lg:col-span-5 bg-[#FAF8F5] p-5 sm:p-7 md:p-8 rounded-3xl border border-[#E3EDE6] space-y-5 sm:space-y-6 w-full shadow-xs">
+            <h3 className="text-base sm:text-lg font-bold text-[#0F281B] font-serif-title break-words">
+              आधिकारिक व्यावसायिक संपर्क
             </h3>
 
-            <div className="space-y-4 text-xs sm:text-sm text-[#3E5244]">
+            <div className="space-y-3.5 sm:space-y-4 text-xs sm:text-sm text-[#3E5244]">
               {/* Phone / Customer Support */}
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-[#E8F2EC] text-[#0F281B] flex items-center justify-center shrink-0 mt-0.5">
                   <PhoneCall className="w-4 h-4" />
                 </div>
-                <div>
-                  <span className="font-semibold text-[#14291B] block">Customer Support &amp; Orders</span>
+                <div className="min-w-0">
+                  <span className="font-semibold text-[#0F281B] block">ग्राहक सेवा एवं WhatsApp ऑर्डर</span>
                   <a
                     href={`tel:+91${config.contact.phone || '9131138853'}`}
-                    className="text-[#235E37] hover:underline font-bold"
+                    className="text-[#1C8A4E] hover:underline font-bold break-words"
                   >
                     +91 {config.contact.phone || '9131138853'}
                   </a>
@@ -60,14 +60,14 @@ export const ContactAndShipping: React.FC<ContactAndShippingProps> = ({
 
               {/* Email */}
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-[#E8F2EC] text-[#0F281B] flex items-center justify-center shrink-0 mt-0.5">
                   <Mail className="w-4 h-4" />
                 </div>
-                <div>
-                  <span className="font-semibold text-[#14291B] block">Email Inquiries</span>
+                <div className="min-w-0">
+                  <span className="font-semibold text-[#0F281B] block">ईमेल पूछताछ</span>
                   <a
                     href={`mailto:${config.contact.email}`}
-                    className="text-[#235E37] hover:underline break-all"
+                    className="text-[#1C8A4E] hover:underline break-all"
                   >
                     {config.contact.email}
                   </a>
@@ -76,49 +76,49 @@ export const ContactAndShipping: React.FC<ContactAndShippingProps> = ({
 
               {/* Hours */}
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-[#E8F2EC] text-[#0F281B] flex items-center justify-center shrink-0 mt-0.5">
                   <Clock className="w-4 h-4" />
                 </div>
-                <div>
-                  <span className="font-semibold text-[#14291B] block">Support Hours</span>
-                  <span>{config.contact.supportHours}</span>
+                <div className="min-w-0">
+                  <span className="font-semibold text-[#0F281B] block">कार्य समय</span>
+                  <span className="break-words">{config.contact.supportHours}</span>
                 </div>
               </div>
 
               {/* Office Address */}
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-[#E8F2EC] text-[#0F281B] flex items-center justify-center shrink-0 mt-0.5">
                   <Building2 className="w-4 h-4" />
                 </div>
-                <div>
-                  <span className="font-semibold text-[#14291B] block">Registered Office</span>
-                  <span className="text-xs text-[#526658]">
-                    {config.contact.officeAddress || '138/139 B, Shriram Nagar, Khajrana, Indore, M.P. 452016'}
+                <div className="min-w-0">
+                  <span className="font-semibold text-[#0F281B] block">पंजीकृत कार्यालय पता</span>
+                  <span className="text-xs text-[#526658] break-words">
+                    {config.contact.officeAddress || '138/139 B, श्रीराम नगर, खजराना, इंदौर (म.प्र.) 452016'}
                   </span>
                 </div>
               </div>
 
               {/* Mfg Address */}
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-[#E8F2EC] text-[#0F281B] flex items-center justify-center shrink-0 mt-0.5">
                   <MapPin className="w-4 h-4" />
                 </div>
-                <div>
-                  <span className="font-semibold text-[#14291B] block">Manufacturing Unit</span>
-                  <span className="text-xs text-[#526658]">
-                    {config.contact.mfgAddress || 'Village Paal Nagar, Dewas, M.P. 455001'}
+                <div className="min-w-0">
+                  <span className="font-semibold text-[#0F281B] block">फैक्ट्री / निर्माण स्थल</span>
+                  <span className="text-xs text-[#526658] break-words">
+                    {config.contact.mfgAddress || 'ग्राम पाल नगर, देवास (म.प्र.) 455001'}
                   </span>
                 </div>
               </div>
 
               {/* Lic & Batch */}
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#EBE4D5] text-[#235E37] flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-[#E8F2EC] text-[#0F281B] flex items-center justify-center shrink-0 mt-0.5">
                   <ShieldCheck className="w-4 h-4" />
                 </div>
-                <div>
-                  <span className="font-semibold text-[#14291B] block">Ayurvedic Manufacturing License</span>
-                  <span className="text-xs text-[#1F5433] font-mono font-bold">
+                <div className="min-w-0">
+                  <span className="font-semibold text-[#0F281B] block">आयुर्वेदिक औषधि निर्माण लाइसेंस</span>
+                  <span className="text-xs text-[#0F281B] font-mono font-bold break-words">
                     {config.contact.ayurvedicLicenseNo}
                   </span>
                 </div>
@@ -128,61 +128,61 @@ export const ContactAndShipping: React.FC<ContactAndShippingProps> = ({
             <div className="pt-2">
               <button
                 onClick={onOrderWhatsApp}
-                className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-[#1C8A4E] hover:bg-[#15723F] text-white text-xs sm:text-sm font-bold transition-colors shadow-xs"
+                className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-[#0F281B] hover:bg-[#143524] active:scale-[0.99] text-white text-xs sm:text-sm font-bold transition-colors shadow-xs cursor-pointer"
               >
-                <MessageSquare className="w-4 h-4 fill-white" />
-                <span>Message on WhatsApp (+91 {config.contact.phone})</span>
+                <MessageSquare className="w-4 h-4 text-[#88C498] fill-[#88C498] shrink-0" />
+                <span className="truncate">WhatsApp पर संदेश भेजें (+91 {config.contact.phone})</span>
               </button>
             </div>
           </div>
 
           {/* Shipping & Delivery Details */}
-          <div className="lg:col-span-7 bg-[#FAF8F5] p-6 sm:p-8 rounded-3xl border border-[#E9E2D4] space-y-6">
-            <h3 className="text-lg font-bold text-[#112418] font-serif-title flex items-center gap-2">
-              <Truck className="w-5 h-5 text-[#235E37]" />
-              <span>Fast Pan-India Express Delivery</span>
+          <div className="lg:col-span-7 bg-[#FAF8F5] p-5 sm:p-7 md:p-8 rounded-3xl border border-[#E3EDE6] space-y-5 sm:space-y-6 w-full shadow-xs">
+            <h3 className="text-base sm:text-lg font-bold text-[#0F281B] font-serif-title flex items-center gap-2 break-words">
+              <Truck className="w-5 h-5 text-[#1C8A4E] shrink-0" />
+              <span>अखिल भारतीय तीव्र एक्सप्रेस डिलीवरी</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 rounded-2xl bg-white border border-[#ECE5D8]">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#235E37] block mb-1">
-                  Dispatch Schedule
+              <div className="p-4 rounded-2xl bg-white border border-[#E3EDE6]">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#1C8A4E] block mb-1">
+                  डिस्पैच समय-सारणी
                 </span>
-                <p className="text-xs text-[#435749] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#435749] leading-relaxed break-words">
                   {config.shipping.dispatchTime}
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-[#ECE5D8]">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#235E37] block mb-1">
-                  Transit Times
+              <div className="p-4 rounded-2xl bg-white border border-[#E3EDE6]">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#1C8A4E] block mb-1">
+                  डिलीवरी अवधि
                 </span>
-                <p className="text-xs text-[#435749] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#435749] leading-relaxed break-words">
                   {config.shipping.deliveryTimeline}
                 </p>
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#F4EDE0] border border-[#E3D9C5] text-xs text-[#485C4F] space-y-1.5">
-              <span className="font-bold text-[#162B1E] block">Courier Tracking &amp; WhatsApp Updates</span>
-              <p>{config.shipping.chargesNote}</p>
-              <p className="text-[11px] text-[#63776A]">
-                Once your order is booked, your real-time tracking number and courier link will be provided directly on your WhatsApp chat.
+            <div className="p-4 rounded-2xl bg-[#F2F7F4] border border-[#DFEBE3] text-xs sm:text-sm text-[#3E5245] space-y-1.5">
+              <span className="font-bold text-[#0F281B] block">कूरियर ट्रैकिंग एवं WhatsApp अपडेट्स</span>
+              <p className="break-words">{config.shipping.chargesNote}</p>
+              <p className="text-xs text-[#5C6E62] break-words">
+                ऑर्डर बुक होते ही रियल-टाइम कूरियर ट्रैकिंग नंबर और लिंक सीधे आपके WhatsApp चैट पर भेज दिया जाएगा।
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-center text-xs text-[#3D5244] pt-2">
-              <div className="p-2.5 rounded-xl bg-white border border-[#EDE7DB]">
-                <span className="font-bold text-[#14291B] block">Tamper Sealed</span>
-                <span className="text-[10px] text-[#697D70]">Protective lid</span>
+            <div className="grid grid-cols-3 gap-2.5 text-center text-xs text-[#3D5244] pt-2">
+              <div className="p-2.5 rounded-xl bg-white border border-[#E3EDE6] min-w-0">
+                <span className="font-bold text-[#0F281B] block text-[11px] sm:text-xs truncate">सील-बंद जार</span>
+                <span className="text-[10px] text-[#697D70] block truncate">सुरक्षित पैकेजिंग</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white border border-[#EDE7DB]">
-                <span className="font-bold text-[#14291B] block">100% Original</span>
-                <span className="text-[10px] text-[#697D70]">Direct from factory</span>
+              <div className="p-2.5 rounded-xl bg-white border border-[#E3EDE6] min-w-0">
+                <span className="font-bold text-[#0F281B] block text-[11px] sm:text-xs truncate">100% असली व शुद्ध</span>
+                <span className="text-[10px] text-[#697D70] block truncate">सीधे निर्माता द्वारा</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white border border-[#EDE7DB]">
-                <span className="font-bold text-[#14291B] block">Support Phone</span>
-                <span className="text-[10px] text-[#697D70]">9131138853</span>
+              <div className="p-2.5 rounded-xl bg-white border border-[#E3EDE6] min-w-0">
+                <span className="font-bold text-[#0F281B] block text-[11px] sm:text-xs truncate">हेल्पलाइन नंबर</span>
+                <span className="text-[10px] text-[#697D70] block truncate">9131138853</span>
               </div>
             </div>
           </div>

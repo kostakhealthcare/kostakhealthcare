@@ -34,7 +34,7 @@ export interface ProductPackOption {
   size: string; // '25g' or '15g'
   sizeCategory?: '15g' | '25g';
   packType?: 'single' | 'pack2' | 'pack4';
-  packLabel?: string; // 'Single', 'Pack of 2', 'Pack of 4'
+  packLabel?: string;
   quantityInPack: number;
   price: number;
   mrp: number;
@@ -51,15 +51,6 @@ export interface CustomerReview {
   reviewText: string;
   approved: boolean;
   photoUrl?: string;
-}
-
-export interface ReviewVideo {
-  id: string;
-  title: string;
-  customerName?: string;
-  videoUrl: string; // YouTube or direct MP4
-  thumbnailUrl?: string;
-  approved: boolean;
 }
 
 export interface SiteConfig {
@@ -88,7 +79,7 @@ export interface SiteConfig {
   };
   packOptions: ProductPackOption[];
   reviews: CustomerReview[];
-  reviewVideos: ReviewVideo[];
+  reviewVideos: unknown[];
   contact: {
     brand: string;
     email: string;
@@ -100,12 +91,6 @@ export interface SiteConfig {
     batchNo: string;
     expiryPeriod: string;
   };
-  ingredients: {
-    name: string;
-    botanicalName: string;
-    percentage: string;
-    role: string;
-  }[];
   directions: string[];
   shipping: {
     dispatchTime: string;
@@ -125,15 +110,15 @@ export const DEFAULT_CONFIG: SiteConfig = {
   companyFullName: "Kostak Healthcare Private Limited",
   productName: "DAAD FREE Ayurvedic Antifungal Cream",
   tagline: "दाद का दिव्यास्त्र • दाद, खाज, खुजली की असरदार दवाई",
-  packSize: "25 gm",
+  packSize: "25 ग्राम",
   price: 349, // From actual packaging label: ₹349 (MRP 380)
   mrp: 380,
   currencySymbol: "₹",
   heroDescription:
-    "An authentic Ayurvedic proprietary formula with 49% Alba Bark (श्वेत कुटज), Curcuma Longa (हल्दी), and Aloe Vera. Provides fast, soothing relief from ringworm (daad), severe itching, and fungal skin distress. Relief from the first day.",
-  whatsAppNumber: "919131138853", // From genuine label: Customer Support 9131138853 (with 91 country code)
+    "दाद (रिंगवर्म), जिद्दी फंगल संक्रमण, खाज और तीव्र खुजली से पहले ही दिन से असरदार राहत प्रदान करने वाली विशेष आयुर्वेदिक एंटीफंगल क्रीम। स्टेरॉयड-मुक्त एवं संवेदनशील त्वचा के लिए सुरक्षित।",
+  whatsAppNumber: "919131138853",
   whatsAppGreeting:
-    "Hello KOSTAK Healthcare, I am interested in ordering DAAD FREE Ayurvedic Antifungal Cream.",
+    "नमस्ते KOSTAK Healthcare, मैं DAAD FREE आयुर्वेदिक एंटीफंगल क्रीम ऑर्डर करना चाहता/चाहती हूँ।",
   imageVersion: 1,
   images: {
     mainImage: {
@@ -145,7 +130,7 @@ export const DEFAULT_CONFIG: SiteConfig = {
     frontBackJar: {
       url: "/assets/aistudio/WhatsApp_Image_2026-10-16_at_6.14.44_PM_c6612cd6.jpeg",
       googleDriveId: "",
-      alt: "DAAD FREE 25 gm front and back label with complete ingredients, directions and manufacturing details",
+      alt: "DAAD FREE 25 gm front and back label with complete directions and manufacturing details",
       fallback: "/assets/images/25gm_front_and_back_jar.jpeg",
     },
     promoImage1: {
@@ -194,81 +179,81 @@ export const DEFAULT_CONFIG: SiteConfig = {
   packOptions: [
     {
       id: "25gm-single",
-      name: "Single Jar (Standard)",
-      size: "25g",
+      name: "1 जार मानक (25 ग्राम)",
+      size: "25 ग्राम",
       sizeCategory: "25g",
       packType: "single",
-      packLabel: "Single",
+      packLabel: "1 जार (मानक)",
       quantityInPack: 1,
       price: 349,
       mrp: 380,
       imageUrl: "/assets/aistudio/25_gm_Master_Product_front.jpg_0667641f.jpeg",
-      badge: "Most Popular",
+      badge: "सर्वाधिक लोकप्रिय",
     },
     {
       id: "25gm-pack2",
-      name: "Pack of 2 Jars",
-      size: "25g",
+      name: "2 जार का पैक (25 ग्राम x 2)",
+      size: "25 ग्राम",
       sizeCategory: "25g",
       packType: "pack2",
-      packLabel: "Pack of 2",
+      packLabel: "2 जार का पैक",
       quantityInPack: 2,
       price: 649,
       mrp: 760,
       imageUrl: "/assets/aistudio/25_gm_Master_Product_front_Packof2.jpg_976326fb.jpeg",
-      badge: "Save ₹111",
+      badge: "बचत ₹111",
     },
     {
       id: "25gm-pack4",
-      name: "Pack of 4 Jars (Family Saver)",
-      size: "25g",
+      name: "4 जार का पारिवारिक पैक (25 ग्राम x 4)",
+      size: "25 ग्राम",
       sizeCategory: "25g",
       packType: "pack4",
-      packLabel: "Pack of 4",
+      packLabel: "4 जार का पारिवारिक पैक",
       quantityInPack: 4,
       price: 1199,
       mrp: 1520,
       imageUrl: "/assets/aistudio/25_gm_Master_Product_front_Packof4.jpg_d3371fa5.jpeg",
-      badge: "Best Value (Save ₹321)",
+      badge: "सर्वोत्तम बचत (बचत ₹321)",
     },
     {
       id: "15gm-single",
-      name: "Compact Jar (Travel Friendly)",
-      size: "15g",
+      name: "1 जार कॉम्पैक्ट (15 ग्राम)",
+      size: "15 ग्राम",
       sizeCategory: "15g",
       packType: "single",
-      packLabel: "Single",
+      packLabel: "1 जार (कॉम्पैक्ट)",
       quantityInPack: 1,
       price: 249,
       mrp: 280,
       imageUrl: "/assets/aistudio/15gm_Master_Product.jpg_d47597ac.jpeg",
-      badge: "Travel Size",
+      badge: "सुविधाजनक साइज़",
     },
     {
       id: "15gm-pack2",
-      name: "Pack of 2 Jars (15g x 2)",
-      size: "15g",
+      name: "2 जार का पैक (15 ग्राम x 2)",
+      size: "15 ग्राम",
       sizeCategory: "15g",
       packType: "pack2",
-      packLabel: "Pack of 2",
+      packLabel: "2 जार का पैक",
       quantityInPack: 2,
       price: 469,
       mrp: 560,
       imageUrl: "/assets/aistudio/15gm_pack_of_2.jpg_63c7cb40.jpeg",
-      badge: "Save ₹91",
+      badge: "बचत ₹91",
     },
     {
       id: "15gm-pack4",
-      name: "Pack of 4 Jars (15g x 4)",
-      size: "15g",
+      name: "4 जार का कॉम्बो पैक (15 ग्राम x 4)",
+      size: "15 ग्राम",
       sizeCategory: "15g",
       packType: "pack4",
-      packLabel: "Pack of 4",
+      packLabel: "4 जार का कॉम्बो पैक",
       quantityInPack: 4,
       price: 879,
       mrp: 1120,
       imageUrl: "/assets/aistudio/15gm_pack_of_4.jpg_a444cbd3.jpeg",
-      badge: "Economy Saver",
+      badge: "किफायती बचत",
     },
   ],
   reviews: [],
@@ -277,69 +262,37 @@ export const DEFAULT_CONFIG: SiteConfig = {
     brand: "Kostak Healthcare Private Limited",
     email: "kostakhealthcare@gmail.com",
     phone: "9131138853",
-    supportHours: "Monday to Saturday, 9:00 AM – 7:00 PM IST",
-    officeAddress: "138/139 B, Shriram Nagar, Khajrana, Indore, M.P. 452016",
-    mfgAddress: "Village Paal Nagar, Dewas, M.P. 455001",
+    supportHours: "सोमवार से शनिवार, सुबह 9:00 बजे से शाम 7:00 बजे तक",
+    officeAddress: "138/139 B, श्रीराम नगर, खजराना, इंदौर (म.प्र.) 452016",
+    mfgAddress: "ग्राम पाल नगर, देवास (म.प्र.) 455001",
     ayurvedicLicenseNo: "MP/D/124/2026",
     batchNo: "Dt092601",
-    expiryPeriod: "Best before 36 months from Mfg Date",
+    expiryPeriod: "निर्माण तिथि से 36 महीने तक उपयोगी (Best Before 36 Months)",
   },
-  ingredients: [
-    {
-      name: "Alba Bark (श्वेत कुटज छाल)",
-      botanicalName: "Alba Bark (Wrightia tinctoria)",
-      percentage: "49%",
-      role: "Potent classical Ayurvedic bark recognized for purifying skin tissues and counteracting stubborn fungal irritations.",
-    },
-    {
-      name: "Cocos Nucifera (नारियल तेल)",
-      botanicalName: "Cocos Nucifera",
-      percentage: "0.5%",
-      role: "Pure natural coconut medium providing moisture barrier, reducing dry scaling and softening cracked skin.",
-    },
-    {
-      name: "Curcuma Longa (हल्दी / Haridra)",
-      botanicalName: "Curcuma Longa",
-      percentage: "0.5%",
-      role: "Traditional antimicrobial and anti-inflammatory rhizome that soothes burning sensations and promotes skin healing.",
-    },
-    {
-      name: "Aloevera Gel (घृतकुमारी)",
-      botanicalName: "Aloe Barbadensis",
-      percentage: "3%",
-      role: "Instant cooling hydrator that calms intense itching and prevents irritation on sensitive dermal layers.",
-    },
-    {
-      name: "Excipient Base",
-      botanicalName: "Ayurvedic Cream Base",
-      percentage: "47%",
-      role: "Gentle topical carrier ensuring deep penetration without leaving greasy stains.",
-    },
-  ],
   directions: [
-    "बच्चों की पहुँच से दूर रखें (Keep strictly out of reach of children).",
-    "दवाई को आँखों में न लगने दें (Avoid contact with eyes and mucous membranes).",
-    "दवाई लगाने के बाद हाथों को साबुन से अच्छी तरह धो लें (Wash hands thoroughly with soap after application).",
-    "महत्वपूर्ण निर्देश: अगर कोई अन्य Antifungal दवाई या एलोपैथिक क्रीम आप पहले से इस्तेमाल कर रहे हैं, तो उसे बंद करके कम से कम 07 दिन बाद DAAD FREE क्रीम लगाना शुरू करें।",
-    "प्रभावित त्वचा को हल्के गुनगुने पानी से साफ करके सूखे कपड़े से सुखाएं और क्रीम की पतली परत दिन में 2 बार लगाएं।",
-    "Storage: Store in a dry place away from direct sunlight. For external topical use only.",
+    "बच्चों की पहुँच से हमेशा दूर रखें।",
+    "दवाई को आँखों और कोमल अंगों में बिल्कुल न लगने दें।",
+    "क्रीम लगाने के बाद अपने हाथों को साबुन व पानी से अच्छी तरह धो लें।",
+    "विशेष सावधानी: यदि आप पहले से कोई अन्य एंटीफंगल (एलोपैथिक) क्रीम या दवा इस्तेमाल कर रहे हैं, तो उसे बंद करने के कम से कम 07 दिन बाद ही DAAD FREE क्रीम लगाना शुरू करें।",
+    "प्रभावित त्वचा को हल्के गुनगुने पानी से साफ करके सूखे सूती कपड़े से पोछें, फिर दिन में 2 बार क्रीम की पतली परत हल्के हाथ से लगाएं।",
+    "भंडारण: सीधे धूप से दूर, ठंडी व सूखी जगह पर रखें। केवल बाहरी उपयोग के लिए।",
   ],
   shipping: {
-    dispatchTime: "Dispatched within 24 to 48 business hours after WhatsApp confirmation.",
-    deliveryTimeline: "Estimated delivery within 3–7 business days across India via express courier.",
-    chargesNote: "Shipping charges or free delivery threshold will be confirmed directly during WhatsApp checkout.",
+    dispatchTime: "WhatsApp पर ऑर्डर पुष्टि के 24 से 48 घंटे के भीतर पार्सल सुरक्षित पैक कर रवाना (डिस्पैच) किया जाता है।",
+    deliveryTimeline: "एक्सप्रेस कूरियर द्वारा पूरे भारत में 3 से 7 कार्य दिवसों के भीतर सुरक्षित डिलीवरी।",
+    chargesNote: "डिलीवरी शुल्क और फ्री डिलीवरी का विवरण WhatsApp पर ऑर्डर के समय सीधे स्पष्ट कर दिया जाता है।",
   },
   policies: {
-    privacyPolicy: `KOSTAK Healthcare respects your privacy. When you contact us or order through WhatsApp, we collect only the necessary details (such as your name, delivery address, and contact number) required to process and fulfill your order. We do not sell, rent, or trade your personal information with any third party. Your communication remains confidential between you and Kostak Healthcare Private Limited.`,
-    termsAndConditions: `1. Ordering Process: Clicking "Buy Now on WhatsApp" initiates a direct inquiry. An order is confirmed only once stock availability and delivery details are verified with Kostak Healthcare via WhatsApp.
-2. Product Use: DAAD FREE is an Ayurvedic proprietary medicine (Mfg. Lic. No.: MP/D/124/2026) for external topical use only. Follow the manufacturer's directions printed on the jar.
-3. Crucial Precaution: If previously using another antifungal cream, stop and wait 7 days before starting DAAD FREE.
-4. Storage: Store in a dry place away from direct sunlight. Keep out of reach of children.
-5. Changes to Terms: Kostak Healthcare reserves the right to update product pricing and policy terms without prior notice.`,
-    shippingPolicy: `Orders are packed and dispatched via trusted domestic courier partners within 24–48 business hours after WhatsApp order confirmation. Tracking information will be shared directly on WhatsApp upon shipment.`,
-    cancellationAndRefundPolicy: `1. Cancellation: You may cancel your order at any time before dispatch by messaging our support on WhatsApp.
-2. Returns: Due to hygiene, personal care, and safety standards for topical healthcare products, opened or used cream jars cannot be returned.
-3. Damaged or Wrong Item: If you receive a damaged package or an incorrect product, notify us on WhatsApp (9131138853) within 48 hours of delivery with photos/unboxing video for a prompt replacement or refund.`,
+    privacyPolicy: `KOSTAK Healthcare आपकी गोपनीयता का पूरा सम्मान करता है। जब आप WhatsApp के माध्यम से संपर्क या ऑर्डर करते हैं, तो हम केवल वही जानकारी एकत्र करते हैं (जैसे आपका नाम, डिलीवरी पता और संपर्क नंबर) जो आपके ऑर्डर को प्रोसेस करने और पहुंचाने के लिए आवश्यक है। हम आपकी कोई भी व्यक्तिगत जानकारी किसी तीसरे पक्ष के साथ साझा, विक्रय या आदान-प्रदान नहीं करते हैं। आपका और हमारा संवाद पूरी तरह गोपनीय रहता है।`,
+    termsAndConditions: `1. ऑर्डर प्रक्रिया: "WhatsApp पर ऑर्डर करें" बटन दबाने पर सीधा संदेश भेजा जाता है। KOSTAK Healthcare द्वारा WhatsApp पर स्टॉक उपलब्धता और पते की पुष्टि के बाद ही ऑर्डर स्वीकार माना जाता है।
+2. उत्पाद उपयोग: DAAD FREE एक आयुर्वेदिक औषधि (Mfg. Lic. No.: MP/D/124/2026) है जो केवल बाहरी त्वचा पर लगाने के लिए है। जार पर दिए गए निर्देशों का पालन करें।
+3. महत्वपूर्ण सावधानी: यदि पहले से कोई अन्य फंगल क्रीम लगा रहे हों, तो उसे बंद करके 7 दिनों का अंतर रखकर ही इस क्रीम का उपयोग करें।
+4. भंडारण: सीधे धूप से दूर, ठंडी व सूखी जगह पर रखें। बच्चों की पहुंच से दूर रखें।
+5. नियम व शर्तें: Kostak Healthcare समय-समय पर नियमों व उत्पाद मूल्य में आवश्यकतानुसार संशोधन का अधिकार रखता है।`,
+    shippingPolicy: `सभी ऑर्डर WhatsApp पर कन्फर्मेशन के बाद 24-48 घंटों के भीतर प्रतिष्ठित कूरियर पार्टनर्स द्वारा रवाना कर दिए जाते हैं। पार्सल रवाना होते ही ट्रैकिंग नंबर और कूरियर लिंक सीधे आपके WhatsApp पर भेज दिया जाता है।`,
+    cancellationAndRefundPolicy: `1. ऑर्डर निरस्तीकरण (Cancellation): पार्सल डिस्पैच होने से पहले आप किसी भी समय WhatsApp पर संदेश भेजकर ऑर्डर रद्द कर सकते हैं।
+2. वापसी (Returns): स्वच्छता और व्यक्तिगत त्वचा देखभाल उत्पाद होने के कारण खुले हुए या इस्तेमाल किए गए जार की वापसी स्वीकार नहीं की जाती है।
+3. क्षतिग्रस्त उत्पाद (Damaged / Wrong Item): यदि पार्सल क्षतिग्रस्त अवस्था में मिले या गलत उत्पाद प्राप्त हो, तो डिलीवरी के 48 घंटों के भीतर WhatsApp (9131138853) पर अनबॉक्सिंग फोटो/वीडियो के साथ संपर्क करें, तुरंत नया उत्पाद या रिफंड प्रदान किया जाएगा।`,
   },
 };
 
@@ -370,33 +323,6 @@ export function resolveImageUrl(imageConfig: ProductImageConfig, version: number
   return imageConfig.fallback;
 }
 
-export function getEmbedVideoUrl(url: string): { type: "youtube" | "direct" | "unknown"; src: string } {
-  if (!url) return { type: "unknown", src: "" };
-  const trimmed = url.trim();
-
-  const ytMatch = trimmed.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([\w-]{11})/);
-  if (ytMatch && ytMatch[1]) {
-    return {
-      type: "youtube",
-      src: `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?rel=0&modestbranding=1`,
-    };
-  }
-
-  const driveId = extractGoogleDriveId(trimmed);
-  if (driveId) {
-    return {
-      type: "youtube",
-      src: `https://drive.google.com/file/d/${driveId}/preview`,
-    };
-  }
-
-  if (trimmed.endsWith(".mp4") || trimmed.endsWith(".webm") || trimmed.startsWith("http")) {
-    return { type: "direct", src: trimmed };
-  }
-
-  return { type: "direct", src: trimmed };
-}
-
 export function loadSiteConfig(): SiteConfig {
   const localOverride = localStorage.getItem("KOSTAK_DAAD_FREE_CONFIG");
   if (localOverride) {
@@ -414,12 +340,4 @@ export function loadSiteConfig(): SiteConfig {
   }
 
   return DEFAULT_CONFIG;
-}
-
-export function saveSiteConfigLocally(config: SiteConfig): void {
-  localStorage.setItem("KOSTAK_DAAD_FREE_CONFIG", JSON.stringify(config, null, 2));
-}
-
-export function resetSiteConfigLocally(): void {
-  localStorage.removeItem("KOSTAK_DAAD_FREE_CONFIG");
 }

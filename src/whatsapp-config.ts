@@ -18,7 +18,7 @@ export const WHATSAPP_BUSINESS = {
   rawNumber: '9131138853',
   fullNumber: '919131138853',
   clickToChatBaseUrl: 'https://wa.me/919131138853',
-  brandTeamName: 'DAAD FREE Team',
+  brandTeamName: 'DAAD FREE टीम',
   companyName: 'KOSTAK Healthcare',
 };
 
@@ -34,47 +34,47 @@ export interface OrderMessageParams {
 }
 
 /**
- * Formats clean size string (e.g., ensures '15g' or '25g')
+ * Formats clean size string in Hindi (e.g., '25 ग्राम' or '15 ग्राम')
  */
 export function formatSizeDisplay(size: string): string {
-  if (!size) return '25g';
+  if (!size) return '25 ग्राम';
   const clean = size.toLowerCase();
-  if (clean.includes('15')) return '15g';
-  if (clean.includes('25')) return '25g';
+  if (clean.includes('15')) return '15 ग्राम';
+  if (clean.includes('25')) return '25 ग्राम';
   return size;
 }
 
 /**
- * Formats pack display (e.g., 'Single', 'Pack of 2', 'Pack of 4')
+ * Formats pack display in Hindi (e.g., '1 जार (मानक)', '2 जार का पैक', '4 जार का पारिवारिक पैक')
  */
 export function formatPackDisplay(pack: string): string {
-  if (!pack) return 'Single';
+  if (!pack) return '1 जार (मानक)';
   const clean = pack.toLowerCase();
-  if (clean.includes('4')) return 'Pack of 4';
-  if (clean.includes('2')) return 'Pack of 2';
-  return 'Single';
+  if (clean.includes('4') || clean.includes('चार')) return '4 जार का पारिवारिक बचत पैक';
+  if (clean.includes('2') || clean.includes('दो')) return '2 जार का पैक';
+  return '1 जार (मानक)';
 }
 
 /**
- * Generates the standardized customer order message as required:
+ * Generates the standardized Hindi customer order message:
  *
- * Hello DAAD FREE Team,
- * I want to place an order.
+ * नमस्ते DAAD FREE टीम,
+ * मैं ऑर्डर देना चाहता/चाहती हूँ:
  * 
- * Product: [Product Name]
- * Size: [Size]
- * Pack: [Pack]
- * Quantity: [Quantity]
- * Total Amount: [Amount]
+ * उत्पाद: [Product Name]
+ * साइज़: [Size]
+ * पैक: [Pack]
+ * मात्रा: [Quantity]
+ * कुल राशि: [Amount]
  * 
- * Please confirm my order and delivery details.
+ * कृपया मेरे ऑर्डर और डिलीवरी विवरण की पुष्टि करें। धन्यवाद!
  */
 export function generateOrderMessage(params: OrderMessageParams): string {
   const currency = params.currencySymbol || '₹';
   const sizeText = formatSizeDisplay(params.size);
   const packText = formatPackDisplay(params.pack);
   
-  let amountText = 'Contact for price';
+  let amountText = 'मूल्य हेतु संपर्क करें';
   if (params.totalAmount != null && !isNaN(params.totalAmount)) {
     amountText = `${currency}${params.totalAmount}`;
   } else if (params.unitPrice != null && !isNaN(params.unitPrice)) {
@@ -82,16 +82,16 @@ export function generateOrderMessage(params: OrderMessageParams): string {
   }
 
   const lines = [
-    `Hello ${WHATSAPP_BUSINESS.brandTeamName},`,
-    `I want to place an order.`,
+    `नमस्ते ${WHATSAPP_BUSINESS.brandTeamName},`,
+    `मैं ऑर्डर देना चाहता/चाहती हूँ:`,
     ``,
-    `Product: ${params.productName}`,
-    `Size: ${sizeText}`,
-    `Pack: ${packText}`,
-    `Quantity: ${params.quantity}`,
-    `Total Amount: ${amountText}`,
+    `उत्पाद: ${params.productName}`,
+    `साइज़: ${sizeText}`,
+    `पैक: ${packText}`,
+    `मात्रा: ${params.quantity}`,
+    `कुल राशि: ${amountText}`,
     ``,
-    `Please confirm my order and delivery details.`
+    `कृपया मेरे ऑर्डर और डिलीवरी विवरण की पुष्टि करें। धन्यवाद!`
   ];
 
   return lines.join('\n');
@@ -99,10 +99,7 @@ export function generateOrderMessage(params: OrderMessageParams): string {
 
 /**
  * Generates cross-platform WhatsApp Click-to-Chat URL
- * Works on:
- * - Android (opens WhatsApp native app)
- * - iPhone / iOS (opens WhatsApp native app via Universal Links)
- * - Desktop Chrome / Edge / Safari / Firefox (opens WhatsApp Web or Desktop application)
+ * Works on Android, iPhone / iOS, and Desktop Chrome / Edge / Safari / Firefox
  */
 export function generateWhatsAppOrderUrl(params: OrderMessageParams): string {
   const targetNumber = (params.customWhatsAppNumber || WHATSAPP_BUSINESS.fullNumber).replace(/[^\d]/g, '');
